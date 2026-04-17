@@ -65,8 +65,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 /* ── GAME ── */
 #g-scr{padding-top:0}
 #active{position:relative;z-index:2}
-.s-wrap{padding:40px 0 0;animation:si .35s cubic-bezier(.22,1,.36,1)}
-@keyframes si{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.s-wrap{padding:40px 0 0;opacity:1}
+
 .s-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .s-day{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)}
 .s-num-b{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--ac);background:var(--ac2);border:1px solid rgba(200,255,0,.15);padding:2px 8px;letter-spacing:.1em}
@@ -462,7 +462,7 @@ function showScreen(id){
 
 function updateHUD(scene){
   $('hud').style.display = 'block';
-  $('h-day').textContent = scene.day.split(' — ')[0];
+  $('h-day').textContent = scene.day.split(' — ')[0].toUpperCase();
   $('h-scene').textContent = 'Scene '+scene.label;
   $('h-prog').textContent = gameHistory.length+'/15';
   $('hb-v').style.width = state.v+'%';
@@ -483,8 +483,6 @@ function renderScene(sceneId){
 
   //   // Clear active completely first
   active.innerHTML = '';
-  active.style.opacity = '1';
-
   // Build new scene HTML
   var choicesHtml = '';
   for(var i=0;i<s.ch.length;i++){
@@ -508,9 +506,10 @@ function renderScene(sceneId){
   // onclick handlers set inline above
 
   // Scroll to new scene
-  setTimeout(function(){
-    window.scrollTo({top:0, behavior:'smooth'});
-  },60);
+  // Force full opacity and scroll to top
+  var wrap = active.querySelector('.s-wrap');
+  if(wrap){ wrap.style.opacity = '1'; wrap.style.transform = 'none'; }
+  window.scrollTo({top:0, behavior:'auto'});
 }
 
 // ─── CHOICE HANDLER ─────────────────────────────────────
