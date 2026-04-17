@@ -64,6 +64,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 /* ── GAME ── */
 #g-scr{padding-top:0}
+#active{position:relative;z-index:2}
 .s-wrap{padding:40px 0 0;animation:si .35s cubic-bezier(.22,1,.36,1)}
 @keyframes si{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .s-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px}
@@ -86,8 +87,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;text-align:left;pointer-events:none}
 
 /* history */
-.hist{opacity:.3;pointer-events:none;margin-bottom:0;position:relative}
-.hist::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,var(--bg));pointer-events:none}
+.hist{opacity:.15;pointer-events:none;margin-bottom:0;position:relative;max-height:120px;overflow:hidden}
+.hist::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,var(--bg) 60%);pointer-events:none}
 .hist-chosen{margin-top:8px;padding:10px 14px;background:var(--s1);border-left:2px solid var(--ac);font-size:11px;color:var(--t3);display:flex;align-items:center;gap:10px}
 .hist-k{font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);font-size:11px}
 
@@ -182,7 +183,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <!-- GAME -->
 <div id="g-scr" class="scr">
-  <div id="history"></div>
+  <div id="history" style="overflow:hidden"></div>
   <div id="active"></div>
 </div>
 
@@ -486,11 +487,15 @@ function renderScene(sceneId){
 
   // Archive previous scene
   var active = $('active');
+  var histDiv = $('history');
   if(active.innerHTML.trim() !== ''){
+    histDiv.innerHTML = '';
     var clone = active.cloneNode(true);
     clone.className = 'hist';
-    // Add what was chosen
-    var last = history[gameHistory.length-1];
+    clone.style.animation = 'none';
+    var oldBtns = clone.querySelectorAll('button');
+    for(var b=0;b<oldBtns.length;b++){ oldBtns[b].removeAttribute('onclick'); }
+    var last = gameHistory[gameHistory.length-1];
     if(last){
       var chDiv = document.createElement('div');
       chDiv.className = 'hist-chosen';
@@ -498,7 +503,7 @@ function renderScene(sceneId){
       chDiv.innerHTML = '<span class="hist-k">'+last.ck+'</span><span style="color:var(--t2);font-size:11px">You chose: '+short+'</span>';
       clone.appendChild(chDiv);
     }
-    $('history').appendChild(clone);
+    histDiv.appendChild(clone);
   }
 
   // Build new scene HTML
