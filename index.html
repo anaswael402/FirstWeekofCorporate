@@ -163,7 +163,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="t-cell"><p class="t-cn" style="color:var(--cr)">Credibility</p><p class="t-cd">Do people trust your judgment when it counts</p></div>
     <div class="t-cell"><p class="t-cn" style="color:var(--nr)">Energy</p><p class="t-cd">Your mental bandwidth — affects every decision</p></div>
   </div>
-  <button class="btn-go" id="btn-start">Begin day one <span class="ar">→</span></button>
+  <button class="btn-go" onclick="startGame()">Begin day one <span class="ar" style="pointer-events:none">→</span></button>
 </div>
 
 <!-- HUD -->
@@ -200,7 +200,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div id="e-log"></div>
   <div class="e-adv"><p class="e-at">// What this means going forward</p><p class="e-ab" id="e-adv"></p></div>
   <div class="e-btns">
-    <button class="btn-replay" id="btn-replay">↺ Play again</button>
+    <button class="btn-replay" onclick="restartGame()">↺ Play again</button>
     <span class="e-note">Different choices unlock different scenarios</span>
   </div>
 </div>
@@ -216,7 +216,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <p class="m-note" id="m-note"></p>
     <div class="m-deltas" id="m-deltas"></div>
     <p class="m-hint" id="m-hint"></p>
-    <button class="btn-cont" id="btn-cont">Continue <span style="color:var(--ac);pointer-events:none">→</span></button>
+    <button class="btn-cont" onclick="onContinue()">Continue <span style="color:var(--ac);pointer-events:none">→</span></button>
   </div>
 </div>
 
@@ -504,7 +504,7 @@ function renderScene(sceneId){
   // Build new scene HTML
   var choicesHtml = '';
   for(var i=0;i<s.ch.length;i++){
-    choicesHtml += '<button class="ch" data-idx="'+i+'"><div class="ch-bar"></div><span class="ch-key">'+s.ch[i].k+'</span><span class="ch-txt">'+s.ch[i].t+'</span></button>';
+    choicesHtml += '<button class="ch" onclick="onChoice('+i+')"><div class="ch-bar"></div><span class="ch-key">'+s.ch[i].k+'</span><span class="ch-txt">'+s.ch[i].t+'</span></button>';
   }
 
   active.innerHTML =
@@ -521,13 +521,7 @@ function renderScene(sceneId){
       '<div class="choices">'+choicesHtml+'</div>'+
     '</div>';
 
-  // Attach click handlers
-  var btns = active.querySelectorAll('.ch');
-  for(var j=0;j<btns.length;j++){
-    (function(btn,idx){
-      btn.addEventListener('click',function(){onChoice(idx);});
-    })(btns[j],j);
-  }
+  // onclick handlers set inline above
 
   // Scroll to new scene
   setTimeout(function(){
@@ -671,12 +665,8 @@ function restartGame(){
 
 // ─── INIT ────────────────────────────────────────────────
 
-window.addEventListener('DOMContentLoaded',function(){
-  showScreen('t-scr');
-  $('btn-start').addEventListener('click', startGame);
-  $('btn-cont').addEventListener('click', onContinue);
-  $('btn-replay').addEventListener('click', restartGame);
-});
+// Init — runs after DOM is ready since script is at end of body
+showScreen('t-scr');
 </script>
 </body>
 </html>
