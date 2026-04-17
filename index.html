@@ -17,9 +17,9 @@
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font-family:'DM Mono',monospace;min-height:100vh;cursor:crosshair}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.025) 3px,rgba(0,0,0,.025) 4px);pointer-events:none;z-index:9998}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.025) 3px,rgba(0,0,0,.025) 4px);pointer-events:none;z-index:1}
 
-#wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:1}
+#wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:10000}
 
 /* progress */
 #prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--ac),#00ffaa);transition:width .4s ease;z-index:1000;box-shadow:0 0 8px var(--ac)}
@@ -77,13 +77,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .s-ten{display:block;margin-top:12px;font-size:11px;color:var(--t3);border-top:1px solid var(--b1);padding-top:10px;letter-spacing:.04em}
 .s-ch-hd{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin:20px 0 10px}
 .choices{display:flex;flex-direction:column;gap:8px}
-.ch{display:flex;align-items:stretch;background:var(--s1);border:1px solid var(--b1);cursor:crosshair;transition:border-color .18s,background .18s;overflow:hidden}
+.ch{display:flex;align-items:stretch;background:var(--s1);border:1px solid var(--b1);cursor:crosshair;transition:border-color .18s,background .18s;overflow:hidden;position:relative;z-index:10000;pointer-events:auto}
 .ch:hover{border-color:var(--b3);background:var(--s2)}
 .ch:hover .ch-bar{width:3px}
 .ch:hover .ch-txt{color:var(--tx)}
-.ch-bar{width:0;background:var(--ac);transition:width .2s;flex-shrink:0}
-.ch-key{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ac);padding:18px 14px 18px 18px;flex-shrink:0;align-self:flex-start;padding-top:20px}
-.ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;text-align:left}
+.ch-bar{width:0;background:var(--ac);transition:width .2s;flex-shrink:0;pointer-events:none}
+.ch-key{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ac);padding:18px 14px 18px 18px;flex-shrink:0;align-self:flex-start;padding-top:20px;pointer-events:none}
+.ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;text-align:left;pointer-events:none}
 
 /* history */
 .hist{opacity:.3;pointer-events:none;margin-bottom:0;position:relative}
@@ -92,7 +92,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .hist-k{font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);font-size:11px}
 
 /* ── MODAL ── */
-#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
 .m-box{background:var(--s1);border:1px solid var(--b2);max-width:480px;width:100%;padding:32px;animation:mi .28s cubic-bezier(.22,1,.36,1)}
 @keyframes mi{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
 .m-tag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
@@ -109,7 +109,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .m-hint{font-size:10px;color:var(--t3);margin-bottom:16px;letter-spacing:.05em}
 .m-hint span{color:var(--t2)}
 .m-hint .ac{color:var(--ac)}
-.btn-cont{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:12px 24px;cursor:crosshair;transition:all .18s;letter-spacing:.05em}
+.btn-cont{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:12px 24px;cursor:crosshair;transition:all .18s;letter-spacing:.05em;position:relative;z-index:99999;pointer-events:auto}
 .btn-cont:hover{border-color:var(--ac);color:var(--ac);background:var(--ac2)}
 
 /* ── ENDING ── */
@@ -216,7 +216,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <p class="m-note" id="m-note"></p>
     <div class="m-deltas" id="m-deltas"></div>
     <p class="m-hint" id="m-hint"></p>
-    <button class="btn-cont" id="btn-cont">Continue <span style="color:var(--ac)">→</span></button>
+    <button class="btn-cont" id="btn-cont">Continue <span style="color:var(--ac);pointer-events:none">→</span></button>
   </div>
 </div>
 
@@ -441,7 +441,7 @@ adv:"Don't pretend the week went better than it did. Have one honest conversatio
 // ─── STATE ───────────────────────────────────────────────
 
 var state = {v:50,c:50,n:50};
-var history = [];
+var gameHistory = [];
 var currentSceneId = null;
 var pendingNext = null;
 
@@ -467,14 +467,14 @@ function updateHUD(scene){
   $('hud').style.display = 'block';
   $('h-day').textContent = scene.day.split(' — ')[0];
   $('h-scene').textContent = 'Scene '+scene.label;
-  $('h-prog').textContent = history.length+'/15';
+  $('h-prog').textContent = gameHistory.length+'/15';
   $('hb-v').style.width = state.v+'%';
   $('hb-c').style.width = state.c+'%';
   $('hb-n').style.width = state.n+'%';
   $('hv-v').textContent = state.v;
   $('hv-c').textContent = state.c;
   $('hv-n').textContent = state.n;
-  $('prog').style.width = (history.length/15*100)+'%';
+  $('prog').style.width = (gameHistory.length/15*100)+'%';
 }
 
 // ─── RENDER SCENE ───────────────────────────────────────
@@ -490,7 +490,7 @@ function renderScene(sceneId){
     var clone = active.cloneNode(true);
     clone.className = 'hist';
     // Add what was chosen
-    var last = history[history.length-1];
+    var last = history[gameHistory.length-1];
     if(last){
       var chDiv = document.createElement('div');
       chDiv.className = 'hist-chosen';
@@ -548,7 +548,7 @@ function onChoice(idx){
   state.n = clamp(state.n + o.d.n);
 
   // Record
-  history.push({sid:currentSceneId,idx:idx,ck:ch.k,ct:ch.t,lb:o.lb,d:o.d});
+  gameHistory.push({sid:currentSceneId,idx:idx,ck:ch.k,ct:ch.t,lb:o.lb,d:o.d});
   pendingNext = ch.nx;
 
   // Update HUD
@@ -628,8 +628,8 @@ function showEnding(){
 
   var log = $('e-log');
   log.innerHTML = '';
-  for(var i=0;i<history.length;i++){
-    var h = history[i];
+  for(var i=0;i<gameHistory.length;i++){
+    var h = gameHistory[i];
     var sc = SCENES[h.sid];
     var tot = h.d.v+h.d.c+h.d.n;
     var cls = tot>10?'ig':tot<-10?'ib':'io';
@@ -653,7 +653,7 @@ function showEnding(){
 
 function startGame(){
   state = {v:50,c:50,n:50};
-  history = [];
+  gameHistory = [];
   currentSceneId = null;
   pendingNext = null;
   $('history').innerHTML = '';
