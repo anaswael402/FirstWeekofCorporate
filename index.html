@@ -87,10 +87,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;text-align:left;pointer-events:none}
 
 /* history */
-.hist{opacity:.15;pointer-events:none;margin-bottom:0;position:relative;max-height:120px;overflow:hidden}
-.hist::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,var(--bg) 60%);pointer-events:none}
-.hist-chosen{margin-top:8px;padding:10px 14px;background:var(--s1);border-left:2px solid var(--ac);font-size:11px;color:var(--t3);display:flex;align-items:center;gap:10px}
-.hist-k{font-family:'Syne',sans-serif;font-weight:700;color:var(--ac);font-size:11px}
+
 
 /* ── MODAL ── */
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
@@ -183,7 +180,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <!-- GAME -->
 <div id="g-scr" class="scr">
-  <div id="history" style="overflow:hidden"></div>
   <div id="active"></div>
 </div>
 
@@ -485,26 +481,9 @@ function renderScene(sceneId){
   var s = SCENES[sceneId];
   updateHUD(s);
 
-  // Archive previous scene
-  var active = $('active');
-  var histDiv = $('history');
-  if(active.innerHTML.trim() !== ''){
-    histDiv.innerHTML = '';
-    var clone = active.cloneNode(true);
-    clone.className = 'hist';
-    clone.style.animation = 'none';
-    var oldBtns = clone.querySelectorAll('button');
-    for(var b=0;b<oldBtns.length;b++){ oldBtns[b].removeAttribute('onclick'); }
-    var last = gameHistory[gameHistory.length-1];
-    if(last){
-      var chDiv = document.createElement('div');
-      chDiv.className = 'hist-chosen';
-      var short = last.ct.length>60 ? last.ct.slice(0,60)+'…' : last.ct;
-      chDiv.innerHTML = '<span class="hist-k">'+last.ck+'</span><span style="color:var(--t2);font-size:11px">You chose: '+short+'</span>';
-      clone.appendChild(chDiv);
-    }
-    histDiv.appendChild(clone);
-  }
+  //   // Clear active completely first
+  active.innerHTML = '';
+  active.style.opacity = '1';
 
   // Build new scene HTML
   var choicesHtml = '';
@@ -530,7 +509,7 @@ function renderScene(sceneId){
 
   // Scroll to new scene
   setTimeout(function(){
-    active.scrollIntoView({behavior:'smooth',block:'start'});
+    window.scrollTo({top:0, behavior:'smooth'});
   },60);
 }
 
@@ -655,7 +634,6 @@ function startGame(){
   gameHistory = [];
   currentSceneId = null;
   pendingNext = null;
-  $('history').innerHTML = '';
   $('active').innerHTML = '';
   showScreen('g-scr');
   renderScene('s01');
