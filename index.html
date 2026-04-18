@@ -12,7 +12,7 @@
   --b1:rgba(255,255,255,.07);--b2:rgba(255,255,255,.14);--b3:rgba(255,255,255,.22);
   --tx:#ede9e3;--t2:#9a9589;--t3:#5a5650;
   --ac:#c8ff00;--ac2:rgba(200,255,0,.08);
-  --vi:#4db8ff;--cr:#ffc940;--nr:#ff6b6b;
+  --vi:#4db8ff;--cr:#ffc940;--nr:#a78bfa;
   --gn:#7dff6b;--rd:#ff5252;
 }
 html{scroll-behavior:smooth}
@@ -101,8 +101,12 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .m-note{font-size:11px;color:var(--t3);font-style:italic;border-left:2px solid var(--b2);padding-left:12px;margin-bottom:20px;line-height:1.6}
 .m-deltas{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
 .d-chip{font-size:11px;padding:4px 11px;border-radius:1px;font-family:'Syne',sans-serif;font-weight:600}
-.d-up{background:rgba(125,255,107,.1);color:var(--gn);border:1px solid rgba(125,255,107,.2)}
-.d-dn{background:rgba(255,82,82,.1);color:var(--rd);border:1px solid rgba(255,82,82,.2)}
+.d-vis.d-pos{background:rgba(77,184,255,.12);color:#4db8ff;border:1px solid rgba(77,184,255,.25)}
+.d-vis.d-neg{background:rgba(77,184,255,.06);color:#4db8ff;border:1px solid rgba(77,184,255,.15);opacity:.7}
+.d-crd.d-pos{background:rgba(255,201,64,.12);color:#ffc940;border:1px solid rgba(255,201,64,.25)}
+.d-crd.d-neg{background:rgba(255,201,64,.06);color:#ffc940;border:1px solid rgba(255,201,64,.15);opacity:.7}
+.d-nrg.d-pos{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.25)}
+.d-nrg.d-neg{background:rgba(167,139,250,.06);color:#a78bfa;border:1px solid rgba(167,139,250,.15);opacity:.7}
 .d-nt{background:var(--s2);color:var(--t3);border:1px solid var(--b1)}
 .m-hint{font-size:10px;color:var(--t3);margin-bottom:16px;letter-spacing:.05em}
 .m-hint span{color:var(--t2)}
@@ -222,218 +226,204 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 var SCENES = {
 s01:{id:'s01',day:'Day 1 — Orientation',label:'01',title:'The introduction moment',
-sit:'Your manager introduces you to the team in the weekly stand-up. <em>Eight pairs of eyes turn toward you.</em> "Tell us a bit about yourself." You have sixty seconds. The room is completely quiet.',
-ten:'First impressions set a baseline that takes months to undo.',
+sit:`Your manager introduces you to the team in the weekly stand-up. <em>Eight pairs of eyes turn toward you.</em> "Tell us a bit about yourself." You have sixty seconds. The room is completely quiet.`,
+ten:`First impressions set a baseline that takes months to undo.`,
 ch:[
-{k:'A',t:"Keep it short and professional — name, degree, what you'll be working on. Nothing more.",
-o:{ti:'Clean and composed',bo:"You came across as measured. Nobody's impressed, but nobody's uncomfortable either. Your manager nodded once — which in corporate language means acceptable. You've set a neutral baseline. Everything from here is yours to build on.",no:'The quiet confidence play. Works if you back it up with visible work fast.',lb:'Safe',d:{v:0,c:6,n:0}},nx:'s02'},
-{k:'B',t:'Show some personality — go slightly beyond the job title, mention something real.',
-o:{ti:'They remember your name',bo:"There was a slight risk — the room could have been dry. But you read it correctly. Two people smiled. Your manager's expression shifted from polite to genuinely engaged. You're a person to them now, not just a title on an org chart.",no:'High ceiling, real risk. If the room had been cold, this lands badly.',lb:'High variance',d:{v:9,c:4,n:2}},nx:'s02'},
-{k:'C',t:'You prepared for this. Deliver your polished, well-structured 90-second pitch.',
-o:{ti:'A little too rehearsed',bo:"It was technically excellent. It was also clearly scripted — the rhythm was off in a way that people in rooms like this notice immediately. One colleague glanced at their phone. Your manager smiled politely. The content was right; the delivery felt like a performance.",no:'Preparation is good. Invisible preparation is better.',lb:'Misfire',d:{v:2,c:-4,n:-2}},nx:'s02'}
+{k:'A',t:`Keep it short and professional — name, degree, what you'll be working on. Nothing more.`,
+o:{ti:`Clean and composed`,bo:`You came across as measured. Nobody's impressed, but nobody's uncomfortable either. Your manager nodded once. You've set a neutral baseline — everything from here is yours to build on.`,no:`The quiet confidence play. Works if you back it up with visible work fast.`,lb:'Safe',d:{v:0,c:5,n:0}},nx:'s02'},
+{k:'B',t:`Show some personality — go slightly beyond the job title, mention something real.`,
+o:{ti:`They remember your name`,bo:`There was a slight risk — the room could have been dry. But you read it correctly. Two people smiled. Your manager's expression shifted from polite to genuinely engaged. You're a person to them now, not just a title.`,no:`High visibility, lower credibility. You're noticed — not yet trusted.`,lb:'High variance',d:{v:10,c:2,n:2}},nx:'s02'},
+{k:'C',t:`You prepared for this. Deliver your polished, well-structured 90-second pitch.`,
+o:{ti:`A little too rehearsed`,bo:`It was technically excellent and clearly scripted. The rhythm was off in a way people in rooms like this notice immediately. One colleague glanced at their phone. The content was right; the delivery felt like a performance.`,no:`Preparation is good. Invisible preparation is better.`,lb:'Misfire',d:{v:3,c:-5,n:-2}},nx:'s02'}
 ]},
-
 s02:{id:'s02',day:'Day 1 — Orientation',label:'02',title:'The senior colleague trap',
-sit:"A senior colleague walks you through a core process — something you studied extensively. They're explaining it like you've never encountered it. <em>You know this material better than they're presenting it.</em> There's even a factual imprecision in what they just said.",
-ten:'How you handle being underestimated on day one follows you.',
+sit:`A senior colleague walks you through a core process — something you studied extensively. They're explaining it like you've never encountered it. <em>You know this material better than they're presenting it.</em> There's even a factual imprecision in what they just said.`,
+ten:`How you handle being underestimated on day one follows you.`,
 ch:[
-{k:'A',t:'Stay quiet and absorb it — you learn more by listening than by signaling.',
-o:{ti:'The silent play',bo:"You swallowed it. You spent twenty minutes pretending. The frustration is real — your Energy takes a quiet hit from performing ignorance. But you didn't step on anyone's ego on day one, and that matters more than it should in a new environment.",no:'Short-term cost, long-term neutral. The question is whether you ever recover the signal.',lb:'Safe but costly',d:{v:0,c:0,n:-6}},nx:'s03'},
-{k:'B',t:"Mention you're familiar, then ask a deeper technical question to show it.",
-o:{ti:'Smart signal',bo:"The colleague paused when you asked your follow-up question. Then the real conversation started — they engaged at a completely different level. Your manager, walking by, slowed down and caught the last thirty seconds of the exchange. This is how you show capability without announcing it.",no:'Questions beat corrections. Every time. This is the move.',lb:'Best outcome',d:{v:6,c:9,n:2}},nx:'s03'},
-{k:'C',t:'Correct it briefly — errors that go unchallenged become assumptions.',
-o:{ti:'Technically right, socially expensive',bo:"You were correct. The detail did matter. But corrections on day one, in front of others, register differently from corrections in week four. The colleague smiled. It did not reach their eyes. You've created a dynamic that will take weeks to normalize.",no:'Being right and being effective are not the same thing yet.',lb:'Wrong moment',d:{v:2,c:-7,n:0}},nx:'s03'}
+{k:'A',t:`Stay quiet and absorb it — you learn more by listening than by signaling.`,
+o:{ti:`The silent play`,bo:`The logic is real — listening first is often right. The cost is that you spent twenty minutes performing ignorance, which drained more energy than you expected. You didn't lose anything. You just didn't gain anything either, which in a first week has its own weight.`,no:`Absorbing is a skill. The question is whether you ever signal what you absorbed.`,lb:'Safe but costly',d:{v:0,c:0,n:-5}},nx:'s03'},
+{k:'B',t:`Mention you're familiar, then ask a deeper technical question to show it.`,
+o:{ti:`Smart signal`,bo:`The colleague paused when you asked your follow-up. Then the real conversation started. Your manager, walking by, slowed down and caught the last thirty seconds of the exchange. This is how you show capability without announcing it.`,no:`Questions beat corrections. Every time.`,lb:'Best outcome',d:{v:5,c:8,n:2}},nx:'s03'},
+{k:'C',t:`Correct it briefly — errors that go unchallenged become assumptions.`,
+o:{ti:`Technically right, socially expensive`,bo:`You were correct. The detail did matter. But corrections on day one, in front of others, register differently from corrections in week four. The colleague smiled. It did not reach their eyes.`,no:`Being right and being effective are not the same thing yet.`,lb:'Wrong moment',d:{v:3,c:-6,n:0}},nx:'s03'}
 ]},
-
 s03:{id:'s03',day:'Day 2 — First real task',label:'03',title:'The vague assignment',
-sit:'Your manager sends a message at 9:04am: <em>"Can you prepare a project status summary for tomorrow\'s client meeting? EOD works."</em> No template. No context on format, length, or audience. You check the shared drive — three different formats from three different people. EOD is in six hours.',
-ten:'How you handle ambiguity on a first task defines how you handle it forever.',
+sit:`Your manager sends a message at 9:04am: <em>"Can you prepare a project status summary for tomorrow's client meeting? EOD works."</em> No template. No context on format, length, or audience. EOD is in six hours.`,
+ten:`How you handle ambiguity on a first task defines how you handle it forever.`,
 ch:[
-{k:'A',t:"Take a first pass yourself — you'll ask smarter questions once you've tried.",
-o:{ti:'Effort without alignment',bo:'You built something thorough and well-structured over four hours. Your manager glanced at it and said, calmly: "Ah, this isn\'t quite the format we use for clients — let me show you." You did real work that missed the target. The confidence hit is quiet but genuine.',no:'In consulting, this is called a scope misalignment. Same principle.',lb:'Misaligned',d:{v:-2,c:-8,n:-8}},nx:'s04'},
-{k:'B',t:'Ask a colleague informally what format they usually use for this.',
-o:{ti:'Efficient and right',bo:"Your colleague pulled up an old example in under two minutes. You had the correct structure by lunch, submitted something that matched expectations precisely, and had time to make it genuinely good. No drama. This is how experienced professionals actually operate.",no:'Asking colleagues is systematically underused by people who want to look capable.',lb:'Smart',d:{v:0,c:6,n:4}},nx:'s04'},
-{k:'C',t:'Go directly to your manager and ask for clarification on format and audience.',
-o:{ti:'Shows you think upstream',bo:'Your manager said: "Good question — here\'s exactly what the client needs to see." Two minutes of conversation saved three hours of rework. More importantly, it signaled something: you think about the output before diving into the process.',no:'Managers who understand work respect this. Some don\'t. Yours did.',lb:'Proactive',d:{v:6,c:6,n:0}},nx:'s04'}
+{k:'A',t:`Take a first pass yourself — you'll ask smarter questions once you've tried.`,
+o:{ti:`Effort without alignment`,bo:`The instinct was right — you showed initiative. But four hours of good work in the wrong direction is still four hours gone. Your manager wasn't judging your effort. They were looking at the output and it didn't match what they needed.`,no:`Initiative without alignment is speed without direction.`,lb:'Misaligned',d:{v:-3,c:-7,n:-7}},nx:'s04'},
+{k:'B',t:`Ask a colleague informally what format they usually use for this.`,
+o:{ti:`Efficient and right`,bo:`Your colleague pulled up an old example in under two minutes. You had the correct structure by lunch, submitted something that matched expectations precisely, and had time to make it genuinely good.`,no:`Asking colleagues is systematically underused by people who want to look capable.`,lb:'Smart',d:{v:0,c:5,n:4}},nx:'s04'},
+{k:'C',t:`Go directly to your manager and ask for clarification on format and audience.`,
+o:{ti:`Shows you think upstream`,bo:`Your manager said: "Good question — here's exactly what the client needs to see." Two minutes saved three hours. It signaled something: you think about the output before diving into the process.`,no:`Managers who understand work respect this. Some don't. Yours did.`,lb:'Proactive',d:{v:8,c:5,n:0}},nx:'s04'}
 ]},
-
 s04:{id:'s04',day:'Day 2 — First real task',label:'04',title:'The group chat message',
-sit:'You\'ve been added to the team WhatsApp. At 6pm, a senior colleague sends a voice note: <em>"I genuinely don\'t understand why leadership approved this timeline — it\'s completely disconnected from reality."</em> Four people send laughing emojis. A fire emoji. The chat goes quiet.',
-ten:'Your first move in a new social environment becomes a data point about who you are.',
+sit:`You've been added to the team WhatsApp. At 6pm, a senior colleague sends a voice note complaining about leadership's timeline. Four people send laughing emojis. A fire emoji. The chat goes quiet.`,
+ten:`Your first move in a new social environment becomes a data point about who you are.`,
 ch:[
-{k:'A',t:'React with 😂 — match the energy, fit in.',
-o:{ti:'In the room, on record',bo:"You got a quick sense of belonging. The colleague even replied directly to you. But this group has your manager in it — you checked the member list three minutes later. The chat has a memory longer than the moment. You've committed to a camp before you understand the landscape.",no:'Social capital in new environments has a risk-adjusted cost.',lb:'Short-term gain',d:{v:4,c:-6,n:2}},nx:'s05'},
-{k:'B',t:"Don't react at all. Read it. Put your phone down.",
-o:{ti:'Invisible and measured',bo:'Nobody noticed. Nobody judged. You were reading the room without committing to it. Weeks later, your manager mentioned offhand that they appreciated you were "measured" — which is the word professionals use when they\'ve been quietly watching and approving.',no:'Silence in a new environment reads as maturity, not indifference.',lb:'Measured',d:{v:-2,c:4,n:0}},nx:'s05'},
-{k:'C',t:"Reply professionally, pivot the energy: \"Tight timelines — let me know if I can help from my end.\"",
-o:{ti:'The long-term move',bo:"It felt slightly formal in the moment. One person sent a thumbs-up. But three months from now, when trust is established through patterns — this is the kind of early signal that matters. Your manager screenshot it and sent it to their manager. You'll never know this happened.",no:'Your written tone in work channels is a permanent record.',lb:'Best outcome',d:{v:4,c:9,n:-2}},nx:'s05'}
+{k:'A',t:`React with a laughing emoji — match the energy, fit in.`,
+o:{ti:`In the room, on record`,bo:`You got a quick sense of belonging. The colleague even replied directly to you. But your manager is in this group. The chat has a memory longer than the moment. You've committed to a camp before you understand the landscape.`,no:`Social capital in new environments has a risk-adjusted cost.`,lb:'Short-term gain',d:{v:5,c:-5,n:2}},nx:'s05'},
+{k:'B',t:`Don't react at all. Read it. Put your phone down.`,
+o:{ti:`Invisible and measured`,bo:`Nobody noticed. Nobody judged. Weeks later, your manager mentioned they appreciated you were "measured" — which is the word professionals use when they've been quietly watching and approving.`,no:`Silence in a new environment reads as maturity, not indifference.`,lb:'Measured',d:{v:-2,c:4,n:0}},nx:'s05'},
+{k:'C',t:`Reply professionally, pivot the energy: "Tight timelines — let me know if I can help from my end."`,
+o:{ti:`The long-term move`,bo:`It felt slightly formal in the moment. One person sent a thumbs-up. But three months from now, when trust is established through patterns — this is the kind of early signal that matters. Your manager screenshot it and sent it to their manager.`,no:`Your written tone in work channels is a permanent record.`,lb:'Best outcome',d:{v:4,c:8,n:-2}},nx:'s05'}
 ]},
-
 s05:{id:'s05',day:'Day 3 — Pressure test',label:'05',title:'The deadline clash',
-sit:"Your manager needs a deliverable by 8am tomorrow — it's for a client meeting, it's important. Your professor just sent a message: <em>exam rescheduled to tomorrow, same time slot.</em> You cannot do both at full capacity. This isn't hypothetical.",
-ten:"How you handle this tells your manager more about you than a month of normal work.",
+sit:`Your manager needs a deliverable by 8am tomorrow. Your professor just rescheduled an exam to the same time. <em>You cannot do both at full capacity.</em>`,
+ten:`How you handle this tells your manager more about you than a month of normal work.`,
 ch:[
-{k:'A',t:"Deliver the work. You took this job seriously and this is what that means.",
-o:{ti:'Silent sacrifice',bo:"You submitted a solid deliverable. Your exam grade took a hit you'll feel at semester end. Your manager didn't know any of this happened — which means you absorbed the full cost and received none of the credit. Silent sacrifice is not a strategy. It's a pattern that burns people out.",no:"Sacrifices that aren't communicated don't build goodwill. They just cost you.",lb:'Costly',d:{v:3,c:0,n:-6}},nx:'s06'},
-{k:'B',t:"Prioritize the exam. Grades compound too, and your manager doesn't know your full picture.",
-o:{ti:'GPA protected, perception cost',bo:"You did well on the exam. A colleague stepped in on the deliverable. Your manager noticed you weren't available — filed it away. Nothing was said at the time. But things get filed in ways that surface later, in rooms you're not in.",no:"Sacrifices that aren't communicated don't build goodwill. They just cost you.",lb:'Trade-off',d:{v:-8,c:-2,n:4}},nx:'s06'},
-{k:'C',t:'Message your manager directly: conflict, ask for a 24-hour extension with a specific new time.',
-o:{ti:'Honest and specific',bo:'"I have a rescheduled exam at 9am — I can have this to you by 11am instead of 8. Will that work for the meeting?" They replied in three minutes: "Yes, that\'s fine." Managers who respect people remember moments like this.',no:'Specific requests beat vague apologies. Always include the new deadline.',lb:'Best outcome',d:{v:8,c:7,n:2}},nx:'s06'}
+{k:'A',t:`Deliver the work. You took this job seriously and this is what that means.`,
+o:{ti:`Silent sacrifice`,bo:`The commitment was real and your manager got a solid deliverable. What they didn't get was any signal that it cost you something. Sacrifices that aren't communicated don't build goodwill — they just become the baseline expectation.`,no:`Taking things seriously matters. Making the cost invisible doesn't serve you.`,lb:'Costly',d:{v:4,c:0,n:-6}},nx:'s06'},
+{k:'B',t:`Prioritize the exam. Grades compound too, and your manager doesn't know your full picture.`,
+o:{ti:`GPA protected, perception cost`,bo:`You did well on the exam. A colleague stepped in on the deliverable. Your manager noticed you weren't available — filed it away. Things get filed in ways that surface later, in rooms you're not in.`,no:`The right personal decision. A real professional cost.`,lb:'Trade-off',d:{v:-7,c:-2,n:5}},nx:'s06'},
+{k:'C',t:`Message your manager directly: explain the conflict, ask for a 24-hour extension with a specific new time.`,
+o:{ti:`Honest and specific`,bo:`"I have a rescheduled exam at 9am — I can have this to you by 11am instead of 8. Will that work?" They replied in three minutes: "Yes, that's fine." Managers who respect people remember moments like this.`,no:`Specific requests beat vague apologies. Always include the new deadline.`,lb:'Best outcome',d:{v:7,c:8,n:2}},nx:'s06'}
 ]},
-
 s06:{id:'s06',day:'Day 3 — Pressure test',label:'06',title:'You spot a mistake',
-sit:"Reviewing a report your team will present to a client tomorrow, you find a data error. The numbers in one section don't reconcile — it's the kind of thing that will surface badly in a client meeting. <em>It's not your work. The person who wrote it is two levels senior to you.</em>",
-ten:"What you do when you see a problem that isn't technically yours defines your character here.",
+sit:`Reviewing a report your team will present to a client tomorrow, you find a data error. The numbers don't reconcile. <em>It's not your work. The person who wrote it is two levels senior to you.</em>`,
+ten:`What you do when you see a problem that isn't technically yours defines your character here.`,
 ch:[
-{k:'A',t:'Fix it quietly — protecting the team without making it political is its own skill.',
-o:{ti:'Fixed but invisible',bo:"The meeting went well. Nobody knew about the error. Nobody knew you fixed it. You protected the team from embarrassment and received exactly zero acknowledgment for it. This is a real thing that happens constantly in corporate environments.",no:'Good deed, no receipt. Not a strategy.',lb:'Invisible',d:{v:-2,c:0,n:-1}},nx:'s07a'},
-{k:'B',t:"Message the colleague privately before end of day: flag it quietly, give them the chance to fix it.",
-o:{ti:'The trust-building move',bo:'The colleague paused, checked, came back fifteen minutes later: "You\'re completely right — thank you for catching that." They mentioned it to your manager. Your manager brought it up to you the next morning, casually. This is exactly how professional reputations actually get built.',no:'Protecting the team is always better than protecting your comfort.',lb:'Best outcome',d:{v:7,c:7,n:3}},nx:'s07b'},
-{k:'C',t:"Stay in your lane — flagging other people's errors in week one creates enemies fast.",
-o:{ti:'The error surfaces',bo:"The client caught it in the meeting. The room went quiet for a long moment. Your manager handled it professionally. During the internal debrief, someone mentioned the report had been shared for review the previous day. You had seen it. That fact will never be spoken aloud. It will just exist.",no:"Silence becomes complicity in hindsight. Especially when you are new.",lb:'Damaging',d:{v:-5,c:-7,n:-3}},nx:'s07a'}
+{k:'A',t:`Fix it quietly — protecting the team without making it political is its own skill.`,
+o:{ti:`Fixed but invisible`,bo:`You were right that it didn't need to be political. The fix worked. But the colleague will never know to trust you, and your manager will never know you caught it. Quiet competence in week one is indistinguishable from absence.`,no:`Protecting people quietly is good. Protecting people in a way they can see is better.`,lb:'Invisible',d:{v:-2,c:0,n:-1}},nx:'s07a'},
+{k:'B',t:`Message the colleague privately before end of day — flag it quietly, give them the chance to fix it.`,
+o:{ti:`The trust-building move`,bo:`The colleague came back fifteen minutes later: "You're completely right — thank you." They mentioned it to your manager. Your manager brought it up to you the next morning, casually. This is exactly how professional reputations get built.`,no:`Protecting the team is always better than protecting your comfort.`,lb:'Best outcome',d:{v:6,c:8,n:3}},nx:'s07b'},
+{k:'C',t:`Stay in your lane — flagging other people's errors in week one creates enemies fast.`,
+o:{ti:`The error surfaces`,bo:`The logic was defensible. But when the error surfaced in the client meeting, the room went quiet. During the debrief, it emerged the report had been shared for review. You had seen it. The lane you stayed in had a cost you didn't price.`,no:`Staying in your lane is sometimes right. Staying silent on something you saw is different.`,lb:'Damaging',d:{v:-5,c:-7,n:-3}},nx:'s07a'}
 ]},
-
 s07a:{id:'s07a',day:'Day 4 — Politics',label:'07',title:'Two managers, one intern',
-sit:'A department head from a different team approaches you directly: <em>"I heard you\'re sharp with data. We have a small analysis that needs a second pair of eyes — shouldn\'t take more than half a day."</em> Your direct manager didn\'t approve this. You have the capacity. The other person is senior.',
-ten:'Every yes you give outside your direct chain is a decision about trust and loyalty.',
+sit:`A department head approaches you directly: <em>"I heard you're sharp with data. We have a small analysis — shouldn't take more than half a day."</em> Your direct manager didn't approve this. You have the capacity.`,
+ten:`Every yes you give outside your direct chain is a decision about trust and loyalty.`,
 ch:[
-{k:'A',t:'Say yes immediately. More exposure, more experience.',
-o:{ti:'Your manager found out',bo:'You completed the analysis. It was good work. Then your manager asked what you\'d been working on yesterday afternoon. There was a pause. You explained. They said "I see" and moved on. Those two words, in that tone, are the kind of thing that follows you to the next project discussion.',no:'Chain of command exists because organizations need predictability. You just reduced yours.',lb:'Protocol breach',d:{v:2,c:-8,n:0}},nx:'s08'},
-{k:'B',t:"Say you'd love to help, but you need to check with your direct manager first.",
-o:{ti:'Correct protocol, full upside',bo:"Your manager approved it in three minutes. You completed the work. Both managers have now seen you operate correctly. You gained cross-functional visibility while staying inside the right structure. This is the answer — not because it's cautious, but because it's right.",no:'The correct move is usually also the strategically optimal one.',lb:'Best outcome',d:{v:8,c:6,n:-1}},nx:'s08'},
-{k:'C',t:"Decline politely. Stay focused on your own team's priorities.",
-o:{ti:'Focused, but a missed signal',bo:"Your manager heard you'd declined and said nothing. What you didn't know: the other team's project became a major cross-functional initiative. The people who helped early got pulled into the core team. Declining wasn't wrong. But the cost was invisible at the time.",no:"Saying no always costs something. The question is whether you\'re pricing it correctly.",lb:'Opportunity cost',d:{v:-5,c:2,n:4}},nx:'s08'}
+{k:'A',t:`Say yes immediately. More exposure, more experience.`,
+o:{ti:`Your manager found out`,bo:`You completed the analysis. Good work. Then your manager asked what you'd been working on. There was a pause. They said "I see" and moved on. Those two words, in that tone, follow you to the next project discussion.`,no:`Chain of command exists because organizations need predictability. You just reduced yours.`,lb:'Protocol breach',d:{v:3,c:-8,n:0}},nx:'s08'},
+{k:'B',t:`Say you'd love to help, but you need to check with your direct manager first.`,
+o:{ti:`Correct protocol, full upside`,bo:`Your manager approved it in three minutes. You completed the work. Both managers have now seen you operate correctly. You gained cross-functional visibility while staying inside the right structure.`,no:`The correct move is usually also the strategically optimal one.`,lb:'Best outcome',d:{v:7,c:6,n:-1}},nx:'s08'},
+{k:'C',t:`Decline politely. Stay focused on your own team's priorities.`,
+o:{ti:`Focused, but a missed signal`,bo:`Your manager heard you'd declined and said nothing. What you didn't know: the other team's project became a major cross-functional initiative. The people who helped early got pulled into the core team.`,no:`Saying no always costs something. The question is whether you're pricing it correctly.`,lb:'Opportunity cost',d:{v:-4,c:2,n:4}},nx:'s08'}
 ]},
-
 s07b:{id:'s07b',day:'Day 4 — Politics',label:'07',alt:true,title:'The unexpected meeting invite',
-sit:'Your manager adds you to a calendar invite titled "Client Strategy — Core Team." It\'s scheduled for tomorrow. There are seven names on the invite. <em>You are the most junior person on the list by a significant margin.</em> No explanation is given for why you were included.',
-ten:'Being in rooms you haven\'t earned yet is both an opportunity and a test.',
+sit:`Your manager adds you to a calendar invite: "Client Strategy — Core Team." Seven names on the invite. <em>You are the most junior person on the list by a significant margin.</em> No explanation for why you were included.`,
+ten:`Being in rooms you haven't earned yet is both an opportunity and a test.`,
 ch:[
-{k:'A',t:'Prepare extensively — research every person on the invite, study the client background.',
-o:{ti:'Quietly prepared',bo:"You arrived knowing more context than most people in the room. You didn't speak much, but when you did, it was precise. Your manager looked over once during one of your comments. This is the way you use opportunities like this — you don't announce your preparation, you let it show.",no:'Preparation is invisible. Its outputs are not.',lb:'Right move',d:{v:6,c:8,n:-4}},nx:'s08'},
-{k:'B',t:"Attend normally. You'll follow the conversation and contribute if something relevant comes up.",
-o:{ti:'Present but passive',bo:"You followed everything. You understood most of it. You contributed nothing. At the end, your manager asked you afterward what you thought. You gave a reasonable answer. They nodded. The opportunity to demonstrate that the inclusion was earned passed quietly.",no:'Being in the room is not the same as being in the conversation.',lb:'Missed',d:{v:2,c:0,n:0}},nx:'s08'},
-{k:'C',t:"Message your manager before the meeting: ask if there's anything specific they want you to contribute.",
-o:{ti:'Showed up with a role',bo:'Your manager replied: "Good question — I want you to track the action items and flag any data gaps you notice." You walked in with a defined purpose. You executed it cleanly. Two people asked your manager afterward who you were.',no:'Asking for a role is better than waiting to be given one.',lb:'Best outcome',d:{v:7,c:5,n:-2}},nx:'s08'}
+{k:'A',t:`Prepare extensively — research every person on the invite, study the client background.`,
+o:{ti:`Quietly prepared`,bo:`You arrived knowing more context than most people in the room. When you spoke, it was precise. Your manager looked over once during one of your comments. This is how you use opportunities like this — you let preparation show through output, not announcement.`,no:`Preparation is invisible. Its outputs are not.`,lb:'Right move',d:{v:5,c:8,n:-4}},nx:'s08'},
+{k:'B',t:`Attend normally. Follow the conversation and contribute if something comes up.`,
+o:{ti:`Present but passive`,bo:`You followed everything. You understood most of it. You contributed nothing. At the end, your manager asked what you thought. You gave a reasonable answer. The opportunity to demonstrate that the inclusion was earned passed quietly.`,no:`Being in the room is not the same as being in the conversation.`,lb:'Missed',d:{v:2,c:0,n:0}},nx:'s08'},
+{k:'C',t:`Message your manager before the meeting: ask if there's anything specific they want you to contribute.`,
+o:{ti:`Showed up with a role`,bo:`Your manager replied: "Good question — I want you to track the action items and flag any data gaps." You walked in with a defined purpose. Two people asked your manager afterward who you were.`,no:`Asking for a role is better than waiting to be given one.`,lb:'Best outcome',d:{v:8,c:5,n:-2}},nx:'s08'}
 ]},
-
 s08:{id:'s08',day:'Day 4 — Politics',label:'08',title:'The after-work invite',
-sit:"The full team is going out after work. It's Thursday. Your manager will be there. You're running on low energy — this has been a long week. You also have an 8am class tomorrow. <em>But the entire team is going, and declining feels like a statement you didn't intend to make.</em>",
-ten:'How you protect your energy while staying visible is a skill most people take years to develop.',
+sit:`The full team is going out after work. Your manager will be there. You're running on low energy. You also have an 8am class tomorrow. <em>But the entire team is going.</em>`,
+ten:`How you protect your energy while staying visible is a skill most people take years to develop.`,
 ch:[
-{k:'A',t:'Go and stay the whole night. Team relationships are built in these moments.',
-o:{ti:'You stayed. You paid.',bo:"It was a genuinely good night. Two colleagues opened up in ways they wouldn't in a meeting room. You got closer to people. You also got home at 1am, missed your 8am, and showed up to work on Friday visibly running on empty. The energy debt didn't just affect Friday — it affected how you handled the final day.",no:"Energy debt compounds. Friday's scenarios will be harder.",lb:'High cost',d:{v:6,c:0,n:-8}},nx:'s09'},
-{k:'B',t:'Go for an hour. Be genuinely present. Leave cleanly with a real reason.',
-o:{ti:'Quality over quantity',bo:'You stayed for the first round. You were actually there — no phone, real conversations. Then you left clearly: "Early morning, but this was great." Your manager smiled. The team understood. Boundaries communicated with warmth are almost always respected.',no:'Energy debt compounds. You cannot outperform a depleted baseline.',lb:'Best outcome',d:{v:6,c:5,n:-2}},nx:'s09'},
-{k:'C',t:'Skip it. Send a genuine message saying you have an early commitment.',
-o:{ti:'Read the room wrong',bo:"Your message was warm and well-worded. But the team bonded over something that evening — an inside joke, a real conversation, a moment — and you weren't part of it. These exclusions are rarely intentional. They compound quietly over weeks.",no:'Energy saved, connection cost. Sometimes the trade is wrong.',lb:'Isolation risk',d:{v:-8,c:0,n:6}},nx:'s09'}
+{k:'A',t:`Go and stay the whole night. Team relationships are built in these moments.`,
+o:{ti:`You stayed. You paid.`,bo:`It was a genuinely good night. Two colleagues opened up in ways they wouldn't in a meeting room. You got closer to people. You also got home at 1am and showed up on Friday visibly running on empty. The energy debt didn't just affect Friday — it affected everything that followed.`,no:`Energy debt compounds. You cannot outperform a depleted baseline.`,lb:'High cost',d:{v:7,c:0,n:-9}},nx:'s09'},
+{k:'B',t:`Go for an hour. Be genuinely present. Leave cleanly with a real reason.`,
+o:{ti:`Quality over quantity`,bo:`You stayed for the first round. You were actually there — no phone, real conversations. Then you left clearly: "Early morning, but this was great." Your manager smiled. Boundaries communicated with warmth are almost always respected.`,no:`The best outcome. Presence over duration.`,lb:'Best outcome',d:{v:6,c:4,n:-2}},nx:'s09'},
+{k:'C',t:`Skip it. Send a genuine message saying you have an early commitment.`,
+o:{ti:`Read the room wrong`,bo:`Your message was warm. But the team bonded over something that evening and you weren't part of it. These exclusions are rarely intentional. They compound quietly over weeks until you notice you're slightly outside something you can't name.`,no:`Energy saved, connection cost. Sometimes the trade is wrong.`,lb:'Isolation risk',d:{v:-7,c:0,n:6}},nx:'s09'}
 ]},
-
 s09:{id:'s09',day:'Day 5 — The verdict',label:'09',title:'End of week check-in',
-sit:'Your manager calls you for a 15-minute meeting: <em>"Just checking in — how do you feel the week went?"</em> This is the first time you\'ve had one-on-one time since day one. You have this window to shape how they see you before they form their own complete narrative.',
-ten:'Self-assessment in a professional context is a skill. Most people fail it in one of two directions.',
+sit:`Your manager calls you for a 15-minute meeting: <em>"Just checking in — how do you feel the week went?"</em> This is the first time you've had one-on-one time since day one.`,
+ten:`Self-assessment in a professional context is a skill. Most people fail it in one of two directions.`,
 ch:[
-{k:'A',t:'Be honest. Name what was hard, what you learned, what you\'d do differently.',
-o:{ti:'Self-awareness changes the frame',bo:'"I noticed you struggled a bit with the format on Wednesday but figured it out quickly — that\'s the right instinct." They had already seen it. You naming it first transformed what it meant. Honest self-assessment is rare at any level.',no:"The thing you're worried they already noticed — they already noticed. Name it first.",lb:'Best outcome',d:{v:6,c:7,n:2}},nx:'s10'},
-{k:'B',t:"Lead with your wins. You're being evaluated — frame your week the way you'd frame a deliverable.",
-o:{ti:'Selective honesty reads as selective',bo:"They nodded through your wins. Then they mentioned the Wednesday format situation anyway. You recovered well — but there was a visible gap between your framing and theirs. Confidence is valuable. Confidence that doesn't account for the other person's information is just performance.",no:"The thing you're worried they already noticed — they already noticed. Name it first.",lb:'Partial',d:{v:2,c:2,n:0}},nx:'s10'},
-{k:'C',t:'Ask what they noticed before you say anything — their data is more current than your self-image.',
-o:{ti:'Emotional intelligence noted',bo:'"I appreciate that." They shared three observations — two positive, one specific developmental note. Because you listened first, you responded to what actually mattered to them rather than what you\'d prepared to say. The entire register of the meeting shifted.',no:'Listening in a feedback context is a skill most people never develop.',lb:'Strong move',d:{v:6,c:9,n:2}},nx:'s10'}
+{k:'A',t:`Be honest. Name what was hard, what you learned, what you'd do differently.`,
+o:{ti:`Self-awareness changes the frame`,bo:`"I noticed you struggled a bit with the format on Wednesday but figured it out quickly." They had already seen it. You naming it first transformed what it meant. Honest self-assessment is rare at any level.`,no:`The thing you're worried they already noticed — they already noticed. Name it first.`,lb:'Best outcome',d:{v:4,c:8,n:2}},nx:'s10'},
+{k:'B',t:`Lead with your wins. You're being evaluated — frame your week the way you'd frame a deliverable.`,
+o:{ti:`Selective honesty reads as selective`,bo:`The framing instinct was smart. But your manager had already formed their view before you walked in. When they mentioned the Wednesday situation anyway, there was a gap between your narrative and theirs. They read it not as confidence but as selective accounting.`,no:`Framing is a skill. Framing that ignores what the other person already knows is a liability.`,lb:'Partial',d:{v:2,c:2,n:0}},nx:'s10'},
+{k:'C',t:`Ask for their feedback before you say anything about yourself.`,
+o:{ti:`Emotional intelligence noted`,bo:`"I appreciate that." They shared three observations — two positive, one developmental. Because you listened first, you responded to what actually mattered to them. The entire register of the meeting shifted.`,no:`Listening in a feedback context is a skill most people never develop.`,lb:'Strong move',d:{v:5,c:7,n:2}},nx:'s10'}
 ]},
-
 s10:{id:'s10',day:'Day 5 — The verdict',label:'10',title:'The opportunity drop',
-sit:'At the end of your check-in, your manager adds: <em>"There\'s a larger project starting next month — cross-functional, client-facing, visible internally. We\'d consider involving you if you\'re interested."</em> This wasn\'t offered to the other interns. The meeting is about to end.',
-ten:'How you respond to an unexpected opportunity reveals your judgment under pressure.',
+sit:`At the end of your check-in, your manager adds: <em>"There's a larger project starting next month — cross-functional, client-facing, visible internally. We'd consider involving you if you're interested."</em> This wasn't offered to the other interns.`,
+ten:`How you respond to an unexpected opportunity reveals your judgment under pressure.`,
 ch:[
-{k:'A',t:"Say yes immediately. You're not passing this up.",
-o:{ti:'Committed without information',bo:"You said yes. They said great. Two weeks later you discovered the project runs directly through your final exam period. You're fully committed now. Enthusiasm is valuable. Enthusiasm without information is just speed without direction.",no:'Yes is a contract. Read the terms first.',lb:'Uninformed',d:{v:5,c:-4,n:-2}},nx:'s11'},
-{k:'B',t:'Express genuine interest, then ask what the scope and time commitment look like.',
-o:{ti:'The right question',bo:"They walked you through the project. You asked two precise follow-up questions. By the end of the conversation you were already thinking about how to contribute specifically. Your manager sent a follow-up email that evening with the full brief.",no:'Thoughtful interest beats blind enthusiasm every time.',lb:'Best outcome',d:{v:6,c:7,n:2}},nx:'s11'},
-{k:'C',t:"Be honest about your semester load. Ask if partial involvement is possible.",
-o:{ti:'Honest and trusted',bo:'"I want to make sure I can contribute properly, not just be a name on the project." They paused. Then: "That\'s actually very useful to know upfront." They scoped your involvement accordingly. You delivered fully on what you committed to.',no:'Knowing your limits and stating them early is a senior skill.',lb:'Respected',d:{v:4,c:7,n:3}},nx:'s11'}
+{k:'A',t:`Say yes immediately. You're not passing this up.`,
+o:{ti:`Committed without information`,bo:`You said yes. Two weeks later you discovered the project runs directly through your final exam period. You're fully committed now. Enthusiasm is valuable. Enthusiasm without information is just speed without direction.`,no:`Yes is a contract. Read the terms first.`,lb:'Uninformed',d:{v:5,c:-4,n:-2}},nx:'s11'},
+{k:'B',t:`Express genuine interest, then ask what the scope and time commitment look like.`,
+o:{ti:`The right question`,bo:`They walked you through the project. You asked two precise follow-up questions. By the end of the conversation you were already thinking about how to contribute specifically. Your manager sent a follow-up email that evening with the full brief.`,no:`Thoughtful interest beats blind enthusiasm every time.`,lb:'Best outcome',d:{v:5,c:7,n:2}},nx:'s11'},
+{k:'C',t:`Before committing, ask them to walk you through the scope — you want to make sure you can actually deliver.`,
+o:{ti:`Honest and trusted`,bo:`"That's actually very useful to know upfront." They scoped your involvement accordingly. You delivered fully on what you committed to.`,no:`Knowing your limits and stating them early is a senior skill.`,lb:'Respected',d:{v:3,c:6,n:3}},nx:'s11'}
 ]},
-
 s11:{id:'s11',day:'Day 5 — Final hours',label:'11',title:'The colleague asks for a favor',
-sit:'A colleague catches you before you leave: <em>"I know this is a big ask, but I\'m behind on a submission. Could you look over my draft tonight and give me quick feedback? Takes thirty minutes max."</em> You\'re exhausted. You have your own things to finish.',
-ten:'Small favors in a first week define the kind of colleague you become.',
+sit:`A colleague catches you before you leave: <em>"I know this is a big ask, but I'm behind on a submission. Could you look over my draft tonight? Thirty minutes max."</em> You're exhausted.`,
+ten:`Small favors in a first week define the kind of colleague you become.`,
 ch:[
-{k:'A',t:"Say yes. You can find thirty minutes.",
-o:{ti:'The deposit',bo:"You read the draft at 9pm. Left three specific, useful comments. They responded within the hour: \"This is exactly what I needed.\" Small acts of genuine help in the first week get remembered disproportionately. This person will return this when it matters.",no:'Favors in a new environment compound at unusually high rates.',lb:'Good investment',d:{v:2,c:4,n:-4}},nx:'s12'},
-{k:'B',t:"Be honest — you're too depleted tonight, but offer to help tomorrow morning before the submission.",
-o:{ti:'Honest and reliable',bo:"They appreciated the honesty. You gave them thirty minutes the next morning, which was better work than you would have done exhausted at night. They submitted on time. You kept your word. This is what professional reliability actually looks like.",no:'Reliability on small commitments builds more trust than enthusiasm on large ones.',lb:'Reliable',d:{v:0,c:5,n:0}},nx:'s12'},
-{k:'C',t:"Decline. You genuinely cannot take anything else on tonight.",
-o:{ti:'Boundary held',bo:"You said no clearly but warmly. They understood. You protected your energy for Friday morning. The relationship didn't suffer — people who ask favors and get a genuine no generally respect it more than a reluctant yes.",no:"Saying no is fine. The question is whether you have a pattern to stand on.",lb:'Boundary',d:{v:-2,c:0,n:4}},nx:'s12'}
+{k:'A',t:`Say yes. You can find thirty minutes.`,
+o:{ti:`The deposit`,bo:`You read the draft at 9pm. Left three specific, useful comments. They responded: "This is exactly what I needed." Small acts of genuine help in the first week get remembered disproportionately.`,no:`Favors in a new environment compound at unusually high rates.`,lb:'Good investment',d:{v:2,c:4,n:-4}},nx:'s12'},
+{k:'B',t:`Be honest — you're too depleted tonight, but offer to help tomorrow morning before the submission.`,
+o:{ti:`Honest and reliable`,bo:`They appreciated the honesty. You gave them thirty minutes the next morning — better work than you'd have done exhausted. They submitted on time. You kept your word.`,no:`Reliability on small commitments builds more trust than enthusiasm on large ones.`,lb:'Reliable',d:{v:0,c:5,n:0}},nx:'s12'},
+{k:'C',t:`Decline. You genuinely cannot take anything else on tonight.`,
+o:{ti:`Boundary held`,bo:`You said no clearly but warmly. They understood. You protected your energy. People who ask favors and get a genuine no generally respect it more than a reluctant yes.`,no:`Saying no is fine. The question is whether you have a pattern to stand on.`,lb:'Boundary',d:{v:-2,c:0,n:4}},nx:'s12'}
 ]},
-
 s12:{id:'s12',day:'Day 5 — Final hours',label:'12',title:'The overheard conversation',
-sit:'You\'re getting coffee before heading out. You overhear your manager talking to another senior person: <em>"The new one has good instincts — just needs to decide what kind of professional they want to be."</em> The conversation ends before you hear more. They don\'t know you heard.',
-ten:"What you do with information you weren't supposed to have defines your character.",
+sit:`You're getting coffee before heading out. You overhear your manager: <em>"The new one has good instincts — just needs to decide what kind of professional they want to be."</em> They don't know you heard.`,
+ten:`What you do with information you weren't supposed to have defines your character.`,
 ch:[
-{k:'A',t:"Let it go — acting on partial information is how relationships get damaged.",
-o:{ti:'Processed privately',bo:"You didn't react. You carried it with you for the rest of the day — turning the phrase over, trying to understand what it meant. \"Decide what kind of professional they want to be.\" You don't know if it was concern or encouragement. But you're thinking about it.",no:'Some information is most useful when you sit with it quietly.',lb:'Internal',d:{v:0,c:0,n:-2}},nx:'s13'},
-{k:'B',t:'Bring it up directly — ask them to confirm or expand. Most managers respect someone who names what they noticed.',
-o:{ti:'Directness lands well',bo:'Your manager paused. Then they smiled — not the polite kind: "I appreciate you asking directly." They gave you the full version of what they\'d been thinking. It was more nuanced and more positive than the fragment suggested.',no:'Most people never ask for the full version. You did.',lb:'Bold',d:{v:5,c:5,n:3}},nx:'s13'},
-{k:'C',t:"Ask a colleague casually if they know what your manager thinks of your first week.",
-o:{ti:'Third-hand information',bo:"Your colleague gave you their interpretation of your manager's general personality, which wasn't quite what you asked for. You left with an impression — but impressions from second-hand sources are usually more about the source than the subject.",no:'Go to the source. Always go to the source.',lb:'Indirect',d:{v:-2,c:0,n:-2}},nx:'s13'}
+{k:'A',t:`Let it go — acting on partial information is how relationships get damaged.`,
+o:{ti:`Processed privately`,bo:`You were right that partial information is dangerous. You carried the phrase all day. What you don't know is whether it was concern or encouragement, and now you're making decisions in response to something you've only half-heard.`,no:`Caution with partial information is wise. Sitting with ambiguity has its own cost.`,lb:'Internal',d:{v:0,c:0,n:-2}},nx:'s13'},
+{k:'B',t:`Bring it up with your manager directly: ask if there's feedback you should know.`,
+o:{ti:`Directness lands well`,bo:`Your manager paused. Then smiled — not the polite kind: "I appreciate you asking directly." They gave you the full version. It was more nuanced and more positive than the fragment suggested.`,no:`Most people never ask for the full version. You did.`,lb:'Bold',d:{v:5,c:5,n:3}},nx:'s13'},
+{k:'C',t:`Ask a colleague casually if they know what your manager thinks of your first week.`,
+o:{ti:`Third-hand information`,bo:`Your colleague gave you their interpretation of your manager's general personality, which wasn't quite what you asked for. You left with an impression formed two steps removed from the truth.`,no:`Go to the source. Always go to the source.`,lb:'Indirect',d:{v:-2,c:0,n:-2}},nx:'s13'}
 ]},
-
 s13:{id:'s13',day:'Day 5 — Final hours',label:'13',title:'The Friday message',
-sit:"It's 5:30pm on Friday. You're about to close your laptop. A new message from your manager: <em>\"Quick question — do you have the original data file from the Wednesday report? Need it for something next week.\"</em> You have it. It will take four minutes to send with proper context.",
-ten:'Small responsiveness signals compound into a reputation you don\'t fully control.',
+sit:`It's 5:30pm on Friday. You're about to close your laptop. A new message from your manager: <em>"Quick question — do you have the original data file from the Wednesday report? Need it for something next week."</em>`,
+ten:`Small responsiveness signals compound into a reputation you don't fully control.`,
 ch:[
-{k:'A',t:'Send it now — four minutes tonight sets the tone for how reliable you are long-term.',
-o:{ti:'Four minutes that matter',bo:'You sent it clean and clear. Your manager replied: "Perfect — have a good weekend." It took you four minutes. The signal it sent was about an order of magnitude larger than the effort.',no:'Only do this if you can sustain it. Baselines you set stick.',lb:'Reliable',d:{v:4,c:6,n:-2}},nx:'s14'},
-{k:'B',t:"Reply that you have it and will send it Monday — acknowledge it without losing your weekend.",
-o:{ti:'Clear and boundaried',bo:'Your manager replied: "No problem, Monday works." Clean. Professional. You protected your weekend without sacrificing the relationship. The key was the acknowledgment — you didn\'t go dark, you responded and set a clear expectation.',no:'Acknowledging and deferring is always better than silence.',lb:'Balanced',d:{v:0,c:2,n:2}},nx:'s14'},
-{k:'C',t:"Don't respond until Monday. You're done for the week.",
-o:{ti:'Silence reads as absence',bo:"Your manager waited. They eventually found the file themselves. On Monday morning, they mentioned it in passing — no accusation, just a mention. But in a first week, every data point is weighted more heavily than it will be in month three.",no:"The cost here is not the task. It is what the silence communicated.",lb:'Misread',d:{v:-4,c:-4,n:4}},nx:'s14'}
+{k:'A',t:`Send it now with a brief note explaining the file structure.`,
+o:{ti:`Four minutes that matter`,bo:`You sent it clean and clear. Your manager replied: "Perfect — have a good weekend." It took four minutes. The signal it sent was about an order of magnitude larger than the effort.`,no:`Only do this if you can sustain it. Baselines you set stick.`,lb:'Reliable',d:{v:3,c:6,n:-2}},nx:'s14'},
+{k:'B',t:`Reply that you have it and will send it first thing Monday morning.`,
+o:{ti:`Clear and boundaried`,bo:`Your manager replied: "No problem, Monday works." Clean. Professional. You protected your weekend without sacrificing the relationship.`,no:`Acknowledging and deferring is always better than silence.`,lb:'Balanced',d:{v:0,c:2,n:2}},nx:'s14'},
+{k:'C',t:`Don't respond until Monday. You're done for the week.`,
+o:{ti:`Silence reads as absence`,bo:`Your manager waited. They eventually found the file themselves. On Monday they mentioned it in passing. In a first week, every data point is weighted more heavily than it will be in month three.`,no:`The cost here is not the task. It is what the silence communicated.`,lb:'Misread',d:{v:-4,c:-4,n:4}},nx:'s14'}
 ]},
-
 s14:{id:'s14',day:'Day 5 — Final hours',label:'14',title:'Reflecting on the week',
-sit:"You're on your way home. The week is done. You have fifteen minutes and you're thinking about it — what happened, what you'd do differently, what this week is going to mean for the weeks that follow. <em>Your manager said \"decide what kind of professional you want to be.\"</em>",
-ten:'The decisions you make about how to process experience determine how fast you grow.',
+sit:`You're on your way home. The week is done. <em>Your manager said "decide what kind of professional you want to be."</em> This is the first moment you've had to actually think about that.`,
+ten:`The decisions you make about how to process experience determine how fast you grow.`,
 ch:[
-{k:'A',t:'Write it down. Every significant moment from this week, what you did, what you\'d change.',
-o:{ti:'The compound move',bo:"You opened your notes app and wrote for twenty minutes. Some of it was uncomfortable to read back. Seeing your decisions as a sequence rather than isolated events showed you something about your default patterns. This twenty minutes will be worth more than ten hours of future work.",no:'The debrief is the skill. Most people skip it.',lb:'Best habit',d:{v:2,c:4,n:4}},nx:'s15'},
-{k:'B',t:'Call someone you trust — friend, family — and talk through it.',
-o:{ti:'External processing',bo:"You talked for forty minutes. The other person asked two questions that reframed things in ways you hadn't considered. Processing with someone who knows you but isn't in your workplace gives you a perspective you can't get from inside the situation.",no:'Your external network is part of your professional infrastructure.',lb:'Good',d:{v:0,c:2,n:5}},nx:'s15'},
-{k:'C',t:'Decompress. Stop thinking about work. You\'ve earned the rest.',
-o:{ti:'Reset is real',bo:"You disconnected completely. No replay, no analysis. You recharged in a way you couldn't have otherwise. The risk is that the patterns from this week remain unexamined and repeat. Rest is not optional. Reflection is also not optional. They don't cancel each other out.",no:'Rest without reflection is recovery without learning.',lb:'Neutral',d:{v:0,c:0,n:6}},nx:'s15'}
+{k:'A',t:`Write it down. Every significant moment this week — what you did, what you'd change.`,
+o:{ti:`The compound move`,bo:`You wrote for twenty minutes. Some of it was uncomfortable to read back. Seeing your decisions as a sequence rather than isolated events showed you something about your default patterns. This twenty minutes will be worth more than ten hours of future work.`,no:`The debrief is the skill. Most people skip it.`,lb:'Best habit',d:{v:2,c:4,n:4}},nx:'s15'},
+{k:'B',t:`Call someone you trust and talk through it.`,
+o:{ti:`External processing`,bo:`You talked for forty minutes. The other person asked two questions that reframed things in ways you hadn't considered. Processing with someone who knows you but isn't in your workplace gives you a perspective you can't get from inside the situation.`,no:`Your external network is part of your professional infrastructure.`,lb:'Good',d:{v:0,c:2,n:5}},nx:'s15'},
+{k:'C',t:`Decompress. Stop thinking about work. You've earned the rest.`,
+o:{ti:`Reset is real`,bo:`You disconnected completely. You recharged in a way you couldn't have otherwise. The risk is that the patterns from this week remain unexamined and repeat. Rest is not optional. Reflection is also not optional.`,no:`Rest without reflection is recovery without learning.`,lb:'Neutral',d:{v:0,c:0,n:6}},nx:'s15'}
 ]},
-
 s15:{id:'s15',day:'Day 5 — Final hours',label:'15',title:'The last thing',
-sit:'Monday morning. Your manager sends you a message: <em>"We\'re putting together the team for next quarter\'s flagship project. I\'m going to recommend you for a spot. Wanted you to hear it from me first."</em> This is not guaranteed yet. It\'s an intention. <em>The offer is based entirely on the person you showed yourself to be this week.</em>',
-ten:'This is not really a decision. It\'s a mirror.',
+sit:`Monday morning. Your manager sends you a message: <em>"We're putting together the team for next quarter's flagship project. I'm going to recommend you for a spot. Wanted you to hear it from me first."</em>`,
+ten:`This is not really a decision. It's a mirror.`,
 ch:[
-{k:'A',t:'"Thank you. I won\'t let you down."',
-o:{ti:'The promise',bo:"Simple. Direct. No performance. Your manager read it and forwarded it to the project lead with a single line: \"This is who I\'m recommending.\" The week you just had either earned this moment or it didn't. The message is just the final signal of a pattern that was already clear.",no:'Your week speaks. This message just ends the sentence.',lb:'Clean',d:{v:2,c:4,n:0}},nx:null},
-{k:'B',t:'"Before I commit, can you walk me through the scope? I want to make sure I can actually deliver."',
-o:{ti:'The right question, again',bo:'Your manager replied: "Yes — actually, I\'m glad you asked. Let me walk you through it properly." The conversation that followed was more substantive than most people get before joining a project. You entered it with full information and a defined role.',no:'You asked the same question that changed week one. It changed this moment too.',lb:'Best outcome',d:{v:5,c:8,n:2}},nx:null},
-{k:'C',t:'"This means a lot. I\'ve been thinking about exactly this kind of growth."',
-o:{ti:'The authentic response',bo:"Your manager smiled reading it. \"That's what I wanted to hear.\" The specificity — that you'd been thinking about it, that it aligned with something you were working toward — made it land differently from a generic thank-you.",no:'Authenticity in professional communication is rarer than it should be.',lb:'Genuine',d:{v:4,c:5,n:2}},nx:null}
+{k:'A',t:`"Thank you. I won't let you down."`,
+o:{ti:`The promise`,bo:`Simple. Direct. No performance. Your manager read it and forwarded it to the project lead: "This is who I'm recommending." The week you just had either earned this moment or it didn't.`,no:`Your week speaks. This message just ends the sentence.`,lb:'Clean',d:{v:2,c:4,n:0}},nx:null},
+{k:'B',t:`Before committing, ask them to walk you through what the role involves.`,
+o:{ti:`The right question, again`,bo:`Your manager replied: "Yes — I'm glad you asked. Let me walk you through it properly." You entered the project with full information and a defined role.`,no:`You asked the same question that changed week one. It changed this moment too.`,lb:'Best outcome',d:{v:5,c:7,n:2}},nx:null},
+{k:'C',t:`"This means a lot. I've been thinking about exactly this kind of growth."`,
+o:{ti:`The authentic response`,bo:`Your manager smiled reading it. "That's what I wanted to hear." The specificity — that you'd been thinking about it, that it aligned with something you were working toward — made it land differently from a generic thank-you.`,no:`Authenticity in professional communication is rarer than it should be.`,lb:'Genuine',d:{v:3,c:5,n:2}},nx:null}
 ]}
 };
 
 var ENDINGS = [
-{test:function(s){return s.n<26},kick:'// Ending 04 — The energy failure',title:'The\nBurnout.',color:'#ff6b6b',
-body:"You made it through the week but the decisions in the second half show the cost. The pattern is clear: when your energy depleted, your judgment degraded. You started making reactive choices instead of considered ones. The week didn't break you. But you can feel exactly where it could.",
-adv:"Energy management is the meta-skill that determines the quality of every other skill you have. Before next week, identify the one thing that drains you fastest and build one non-negotiable recovery habit around it. Protect it like a deadline."},
+{test:function(s){return s.n<26},kick:'// Ending 04 — The energy failure',title:'The\nBurnout.',color:'#a78bfa',
+body:`You made it through the week but the decisions in the second half show the cost. The pattern is clear: when your energy depleted, your judgment degraded. You started making reactive choices instead of considered ones. The week didn't break you. But you can feel exactly where it could.`,
+adv:`Energy management is the meta-skill that determines the quality of every other skill you have. Before next week, identify the one thing that drains you fastest and build one non-negotiable recovery habit around it. Protect it like a deadline.`},
 {test:function(s){return s.c>=72&&s.v>=70},kick:'// Ending 01 — The ideal outcome',title:'The Rising\nStar.',color:'#c8ff00',
-body:"Your manager is recommending you for the next project before the week is officially over. You threaded the needle — visible enough to be remembered, credible enough to be trusted. This combination is genuinely rare. Most people optimize for one at the cost of the other. You didn't.",
-adv:"You have a window of momentum. Schedule a proper 1:1 with your manager in week two — not to impress, but to get clear on what the next 90 days should look like. The people who rise fast aren't the ones who work harder. They're the ones who work on the right things."},
+body:`Your manager is recommending you for the next project before the week is officially over. You threaded the needle — visible enough to be remembered, credible enough to be trusted. This combination is genuinely rare. Most people optimize for one at the cost of the other. You didn't.`,
+adv:`You have a window of momentum. Schedule a proper 1:1 with your manager in week two — not to impress, but to get clear on what the next 90 days should look like. The people who rise fast work on the right things.`},
 {test:function(s){return s.c>=64&&s.v<70},kick:'// Ending 02 — The ceiling problem',title:'The Trusted\nOperator.',color:'#4db8ff',
-body:"People trust your judgment. They rely on your work. They just don't think of you when the room is deciding who to put on the high-visibility project. Credibility without visibility is a career ceiling — you're competent and present, but invisible in the moments that shape trajectories.",
-adv:"Pick one deliberate visibility action per week. Speak first in the next meeting. Offer to present the thing you usually just prepare. Write the summary email instead of waiting for someone else to. The gap closes through reps, not through a single moment."},
+body:`People trust your judgment. They rely on your work. They just don't think of you when the room is deciding who to put on the high-visibility project. Credibility without visibility is a career ceiling — you're competent and present, but invisible in the moments that shape trajectories.`,
+adv:`Pick one deliberate visibility action per week. Speak first in the next meeting. Offer to present the thing you usually just prepare. The gap closes through reps, not through a single moment.`},
 {test:function(s){return s.v>=63&&s.c<72},kick:'// Ending 03 — The perception gap',title:'The\nEager One.',color:'#ffc940',
-body:"Everyone knows your name. Not everyone fully trusts your judgment yet. You moved fast, showed up strongly, made your presence felt — and a few of your decisions left a residue that people noticed. The raw material is excellent. The pattern needs adjusting.",
-adv:"Before your next instinct to move fast, add one clarifying question. In your next meeting, respond once less than you naturally would and make the one response count. The reputation gap closes with reps of the right kind."},
+body:`Everyone knows your name. Not everyone fully trusts your judgment yet. You moved fast, showed up strongly, made your presence felt — and a few decisions left a residue that people noticed. The raw material is excellent. The pattern needs adjusting.`,
+adv:`Before your next instinct to move fast, add one clarifying question. In your next meeting, respond once less than you naturally would and make the one response count.`},
 {test:function(s){return s.c>=50&&s.v>=50&&s.c<=71&&s.v<=69},kick:'// Ending 05 — Solid foundation',title:'The\nCalculated.',color:'#a78bfa',
-body:"A solid first week. Not spectacular, but real. You made thoughtful calls more often than not, managed your energy reasonably, and left the week with your reputation intact and your manager's confidence established. This is actually the most common outcome for people who are genuinely good.",
-adv:"You have a clean slate and a functional baseline. The next step isn't about fixing weaknesses — it's about choosing one area to develop intentionally. Pick the meter that's lowest and design one specific behavior to move it over the next four weeks."},
+body:`A solid first week. Not spectacular, but real. You made thoughtful calls more often than not, managed your energy reasonably, and left the week with your reputation intact and your manager's confidence established.`,
+adv:`You have a clean slate and a functional baseline. The next step isn't about fixing weaknesses — it's about choosing one area to develop intentionally. Pick the meter that's lowest and design one specific behavior to move it over the next four weeks.`},
 {test:function(){return true},kick:'// Ending 06 — The honest start',title:'The\nRebuilding.',color:'#94a3b8',
-body:"The week was hard and it showed. The combination of decisions you made left your meters below where they needed to be. This doesn't mean the job is over. First weeks are data, not verdicts. But you're starting week two with a deficit to recover from rather than momentum to build on.",
-adv:"Don't pretend the week went better than it did. Have one honest conversation with your manager this week — not to apologize, but to demonstrate that you see what happened and are adjusting. The professionals who recover from hard starts are the ones who name them directly."}
+body:`The week was hard and it showed. The combination of decisions you made left your meters below where they needed to be. This doesn't mean the job is over. First weeks are data, not verdicts. But you're starting week two with a deficit to recover from rather than momentum to build on.`,
+adv:`Don't pretend the week went better than it did. Have one honest conversation with your manager this week — not to apologize, but to demonstrate that you see what happened and are adjusting.`}
 ];
+
 
 // ─── STATE ───────────────────────────────────────────────
 
@@ -547,10 +537,10 @@ function onChoice(idx){
   var dc = $('m-deltas');
   dc.innerHTML = '';
   var d = o.d;
-  if(d.v!==0) dc.innerHTML += '<span class="d-chip '+(d.v>0?'d-up':'d-dn')+'">'+(d.v>0?'+':'')+d.v+' Visibility</span>';
-  if(d.c!==0) dc.innerHTML += '<span class="d-chip '+(d.c>0?'d-up':'d-dn')+'">'+(d.c>0?'+':'')+d.c+' Credibility</span>';
-  if(d.n!==0) dc.innerHTML += '<span class="d-chip '+(d.n>0?'d-up':'d-dn')+'">'+(d.n>0?'+':'')+d.n+' Energy</span>';
-  if(d.v===0&&d.c===0&&d.n===0) dc.innerHTML = '<span class="d-chip d-nt">No meter change</span>';
+  if(d.v!==0) dc.innerHTML += '<span class="d-chip d-vis '+(d.v>0?'d-pos':'d-neg')+'">'+(d.v>0?'+':'')+d.v+' Visibility</span>';
+  if(d.c!==0) dc.innerHTML += '<span class="d-chip d-crd '+(d.c>0?'d-pos':'d-neg')+'">'+(d.c>0?'+':'')+d.c+' Credibility</span>';
+  if(d.n!==0) dc.innerHTML += '<span class="d-chip d-nrg '+(d.n>0?'d-pos':'d-neg')+'">'+(d.n>0?'+':'')+d.n+' Energy</span>';
+  if(d.v===0&&d.c===0&&d.n===0) dc.innerHTML = '<span class="d-chip d-nt">No change</span>';
 
   var hint = $('m-hint');
   if(pendingNext){
