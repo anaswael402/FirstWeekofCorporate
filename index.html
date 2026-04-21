@@ -16,18 +16,17 @@
   --gn:#7dff6b;--rd:#ff5252;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'DM Mono',monospace;min-height:100vh;cursor:crosshair}
+body{background:var(--bg);color:var(--tx);font-family:'DM Mono',monospace;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.025) 3px,rgba(0,0,0,.025) 4px);pointer-events:none;z-index:1}
 
 #wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:10000}
 
-/* progress */
 #prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--ac),#00ffaa);transition:width .4s ease;z-index:1000;box-shadow:0 0 8px var(--ac)}
 
-/* screens */
 .scr{display:none}
+.scr.flex{display:flex}
+.scr.block{display:block}
 
-/* ── TITLE ── */
 #t-scr{min-height:100vh;flex-direction:column;justify-content:center;padding:80px 0 60px}
 .t-kick{font-size:10px;letter-spacing:.22em;color:var(--ac);text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:10px}
 .t-kick::before{content:'';width:24px;height:1px;background:var(--ac);display:block}
@@ -43,18 +42,23 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .t-cell{background:var(--s1);padding:16px}
 .t-cn{font-size:9px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
 .t-cd{font-size:11px;color:var(--t3);line-height:1.5}
+.t-hint{font-size:10px;color:var(--t3);margin-top:18px;letter-spacing:.05em}
+.t-hint kbd{font-family:'DM Mono',monospace;background:var(--s2);border:1px solid var(--b1);padding:1px 6px;color:var(--t2);font-size:10px}
 
-.btn-go{display:inline-flex;align-items:center;gap:14px;background:var(--ac);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:17px 36px;border:none;cursor:crosshair;transition:all .2s;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn-go{display:inline-flex;align-items:center;gap:14px;background:var(--ac);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:17px 36px;border:none;cursor:pointer;transition:all .2s;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
 .btn-go:hover{background:#d8ff1a;transform:translateY(-2px)}
+.btn-go:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .btn-go .ar{transition:transform .2s}
 .btn-go:hover .ar{transform:translateX(4px)}
 
-/* ── HUD ── */
 #hud{position:sticky;top:0;background:rgba(8,8,8,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--b1);padding:12px 0;z-index:100;display:none}
 .h-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .h-day{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
 .h-scene{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);background:var(--ac2);border:1px solid rgba(200,255,0,.15);padding:2px 8px}
 .h-prog{font-size:9px;color:var(--t3);margin-left:auto}
+.h-restart{background:transparent;border:1px solid var(--b1);color:var(--t3);font-family:'DM Mono',monospace;font-size:9px;padding:3px 10px;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .15s}
+.h-restart:hover{border-color:var(--rd);color:var(--rd)}
+.h-restart:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .h-meters{display:flex;gap:14px}
 .h-m{display:flex;align-items:center;gap:6px;flex:1}
 .h-ml{font-size:8px;letter-spacing:.14em;text-transform:uppercase;min-width:28px}
@@ -62,12 +66,12 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .h-mf{height:100%;border-radius:1px;transition:width .6s cubic-bezier(.34,1.56,.64,1)}
 .h-mv{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;min-width:22px;text-align:right}
 
-/* ── GAME ── */
 #g-scr{padding-top:0}
 #active{position:relative;z-index:2}
-.s-wrap{padding:40px 0 0;opacity:1}
+.s-wrap{padding:40px 0 0;opacity:0;transform:translateY(8px);transition:opacity .35s ease, transform .35s ease}
+.s-wrap.show{opacity:1;transform:translateY(0)}
 
-.s-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.s-meta{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
 .s-day{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3)}
 .s-num-b{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--ac);background:var(--ac2);border:1px solid rgba(200,255,0,.15);padding:2px 8px;letter-spacing:.1em}
 .s-alt{font-size:9px;color:var(--t3);border:1px solid var(--b1);padding:2px 8px;margin-left:auto}
@@ -76,22 +80,21 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .s-sit{background:var(--s1);border:1px solid var(--b1);border-left:2px solid var(--b2);padding:20px 22px;margin-bottom:10px;font-size:13px;color:var(--t2);line-height:1.9}
 .s-sit em{color:var(--tx);font-style:normal}
 .s-ten{display:block;margin-top:12px;font-size:11px;color:var(--t3);border-top:1px solid var(--b1);padding-top:10px;letter-spacing:.04em}
-.s-ch-hd{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin:20px 0 10px}
+.s-ch-hd{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.s-ch-hd .kb{font-size:9px;color:var(--t3);margin-left:auto;letter-spacing:.05em;text-transform:none}
+.s-ch-hd .kb kbd{font-family:'DM Mono',monospace;background:var(--s2);border:1px solid var(--b1);padding:1px 5px;color:var(--t2);font-size:9px}
 .choices{display:flex;flex-direction:column;gap:8px}
-.ch{display:flex;align-items:stretch;background:var(--s1);border:1px solid var(--b1);cursor:crosshair;transition:border-color .18s,background .18s;overflow:hidden;position:relative;z-index:10000;pointer-events:auto}
-.ch:hover{border-color:var(--b3);background:var(--s2)}
-.ch:hover .ch-bar{width:3px}
-.ch:hover .ch-txt{color:var(--tx)}
+.ch{display:flex;align-items:stretch;background:var(--s1);border:1px solid var(--b1);cursor:pointer;transition:border-color .18s,background .18s;overflow:hidden;position:relative;z-index:10;pointer-events:auto;text-align:left;font-family:inherit;color:inherit;width:100%}
+.ch:hover,.ch:focus-visible{border-color:var(--b3);background:var(--s2);outline:none}
+.ch:hover .ch-bar,.ch:focus-visible .ch-bar{width:3px}
+.ch:hover .ch-txt,.ch:focus-visible .ch-txt{color:var(--tx)}
 .ch-bar{width:0;background:var(--ac);transition:width .2s;flex-shrink:0;pointer-events:none}
 .ch-key{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--ac);padding:18px 14px 18px 18px;flex-shrink:0;align-self:flex-start;padding-top:20px;pointer-events:none}
-.ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;text-align:left;pointer-events:none}
+.ch-txt{padding:18px 20px 18px 0;font-size:13px;line-height:1.65;color:var(--t2);transition:color .18s;flex:1;pointer-events:none}
 
-/* history */
-
-
-/* ── MODAL ── */
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
-.m-box{background:var(--s1);border:1px solid var(--b2);max-width:480px;width:100%;padding:32px;animation:mi .28s cubic-bezier(.22,1,.36,1)}
+#modal.show{display:flex}
+.m-box{background:var(--s1);border:1px solid var(--b2);max-width:480px;width:100%;padding:32px;animation:mi .28s cubic-bezier(.22,1,.36,1);max-height:90vh;overflow-y:auto}
 @keyframes mi{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
 .m-tag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .m-key{color:var(--ac);background:var(--ac2);border:1px solid rgba(200,255,0,.15);padding:2px 8px}
@@ -111,10 +114,11 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .m-hint{font-size:10px;color:var(--t3);margin-bottom:16px;letter-spacing:.05em}
 .m-hint span{color:var(--t2)}
 .m-hint .ac{color:var(--ac)}
-.btn-cont{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:12px 24px;cursor:crosshair;transition:all .18s;letter-spacing:.05em;position:relative;z-index:99999;pointer-events:auto}
-.btn-cont:hover{border-color:var(--ac);color:var(--ac);background:var(--ac2)}
+.btn-cont{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:12px 24px;cursor:pointer;transition:all .18s;letter-spacing:.05em;position:relative;z-index:99999;pointer-events:auto}
+.btn-cont:hover,.btn-cont:focus-visible{border-color:var(--ac);color:var(--ac);background:var(--ac2);outline:none}
+.m-esc{font-size:9px;color:var(--t3);margin-left:14px;letter-spacing:.08em}
+.m-esc kbd{font-family:'DM Mono',monospace;background:var(--s2);border:1px solid var(--b1);padding:1px 5px;color:var(--t2);font-size:9px}
 
-/* ── ENDING ── */
 #e-scr{min-height:100vh;flex-direction:column;justify-content:center;padding:80px 0 60px}
 .e-meters{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b1);border:1px solid var(--b1);margin-bottom:40px}
 .e-mc{background:var(--s1);padding:20px}
@@ -138,9 +142,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .e-at{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ac);margin-bottom:10px}
 .e-ab{font-size:13px;color:var(--t2);line-height:1.85}
 .e-btns{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.btn-replay{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:14px 28px;cursor:crosshair;transition:all .18s;letter-spacing:.05em}
-.btn-replay:hover{background:var(--ac);color:#000;border-color:var(--ac)}
+.btn-replay{display:inline-flex;align-items:center;gap:10px;background:transparent;border:1px solid var(--b2);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:14px 28px;cursor:pointer;transition:all .18s;letter-spacing:.05em}
+.btn-replay:hover,.btn-replay:focus-visible{background:var(--ac);color:#000;border-color:var(--ac);outline:none}
 .e-note{font-size:11px;color:var(--t3);letter-spacing:.06em}
+
+@media (max-width:480px){
+  .s-bgn{font-size:72px}
+  .ch-key{padding:16px 10px 16px 14px}
+  .ch-txt{padding:16px 14px 16px 0;font-size:12px}
+  .m-box{padding:24px}
+  .h-meters{gap:10px}
+  .h-ml{min-width:24px;font-size:7px}
+}
 </style>
 </head>
 <body>
@@ -156,7 +169,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="t-mi"><div class="t-md" style="background:var(--vi)"></div>Visibility</div>
     <div class="t-mi"><div class="t-md" style="background:var(--cr)"></div>Credibility</div>
     <div class="t-mi"><div class="t-md" style="background:var(--nr)"></div>Energy</div>
-    <div class="t-mi" style="margin-left:auto"><div class="t-md" style="background:var(--b3)"></div>15 scenarios</div>
+    <div class="t-mi" style="margin-left:auto"><div class="t-md" style="background:var(--b3)"></div>12 scenarios</div>
     <div class="t-mi"><div class="t-md" style="background:var(--b3)"></div>6 endings</div>
   </div>
   <p class="t-body">You just started at a large multinational. You're still in university.<br>Your manager is watching. Your colleagues are forming opinions.<br><strong>Every choice this week compounds. Not in a metaphor. In the actual game.</strong></p>
@@ -165,7 +178,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="t-cell"><p class="t-cn" style="color:var(--cr)">Credibility</p><p class="t-cd">Do people trust your judgment when it counts</p></div>
     <div class="t-cell"><p class="t-cn" style="color:var(--nr)">Energy</p><p class="t-cd">Your mental bandwidth — affects every decision</p></div>
   </div>
-  <button class="btn-go" onclick="startGame()">Begin day one <span class="ar" style="pointer-events:none">→</span></button>
+  <button class="btn-go" id="btn-start">Begin day one <span class="ar" aria-hidden="true">→</span></button>
+  <p class="t-hint">Tip: Use <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> to pick choices, <kbd>Enter</kbd> to continue, <kbd>Esc</kbd> to close.</p>
 </div>
 
 <!-- HUD -->
@@ -173,7 +187,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div class="h-top">
     <span class="h-day" id="h-day">Day 1</span>
     <span class="h-scene" id="h-scene">Scene 01</span>
-    <span class="h-prog" id="h-prog"></span>
+    <span class="h-prog" id="h-prog">1/12</span>
+    <button class="h-restart" id="h-restart" title="Restart the week">↺ Restart</button>
   </div>
   <div class="h-meters">
     <div class="h-m"><span class="h-ml" style="color:var(--vi)">VIS</span><div class="h-mt"><div class="h-mf" id="hb-v" style="background:var(--vi);width:35%"></div></div><span class="h-mv" id="hv-v" style="color:var(--vi)">35</span></div>
@@ -201,446 +216,757 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div id="e-log"></div>
   <div class="e-adv"><p class="e-at">// What this means going forward</p><p class="e-ab" id="e-adv"></p></div>
   <div class="e-btns">
-    <button class="btn-replay" onclick="restartGame()">↺ Play again</button>
-    <span class="e-note">Different choices unlock different scenarios</span>
+    <button class="btn-replay" id="btn-replay">↺ Play again</button>
+    <span class="e-note">Choices reshuffle on each replay</span>
   </div>
 </div>
 
-</div><!-- /wrap -->
+</div>
 
 <!-- MODAL -->
-<div id="modal">
-  <div class="m-box">
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+  <div class="m-box" id="m-box">
     <div class="m-tag"><span>You chose</span><span class="m-key" id="m-key">A</span><span class="m-lbl" id="m-lbl"></span></div>
     <h3 class="m-title" id="m-title"></h3>
     <p class="m-body" id="m-body"></p>
     <p class="m-note" id="m-note"></p>
     <div class="m-deltas" id="m-deltas"></div>
     <p class="m-hint" id="m-hint"></p>
-    <button class="btn-cont" onclick="onContinue()">Continue <span style="color:var(--ac);pointer-events:none">→</span></button>
+    <div>
+      <button class="btn-cont" id="btn-cont">Continue <span style="color:var(--ac)" aria-hidden="true">→</span></button>
+      <span class="m-esc"><kbd>Enter</kbd> or <kbd>Esc</kbd></span>
+    </div>
   </div>
 </div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+
+var TOTAL_SCENES = 12;
+
+// ═══════════════════════════════════════════════════════════════
+// SCENE DATA
+// Choices stored as semantic "paths" (best/neutral/risky), not A/B/C.
+// The letter assignment happens at render time (shuffled per run).
+// ═══════════════════════════════════════════════════════════════
 
 var SCENES = {
 s01:{id:'s01',day:'Day 1 — Orientation',label:'01',title:'The introduction moment',
-sit:`Your manager introduces you to the team in the weekly stand-up. <em>Eight pairs of eyes turn toward you.</em> "Tell us a bit about yourself." You have sixty seconds. The room is completely quiet.`,
-ten:`First impressions set a baseline that takes months to undo.`,
+sit:'Your manager introduces you to the team in the weekly stand-up. <em>Eight pairs of eyes turn toward you.</em> "Tell us a bit about yourself." You have sixty seconds. The room is completely quiet.',
+ten:'First impressions set a baseline that takes months to undo.',
 ch:[
-{k:'A',t:`Keep it short and professional — name, degree, what you'll be working on. Nothing more.`,
-o:{ti:`Clean and composed`,bo:`You came across as measured. Nobody's impressed, but nobody's uncomfortable either. Your manager nodded once. You've set a neutral baseline — everything from here is yours to build on.`,no:`The quiet confidence play. Works if you back it up with visible work fast.`,lb:'Safe',d:{v:0,c:5,n:0}},nx:'s02'},
-{k:'B',t:`Show some personality — go slightly beyond the job title, mention something real.`,
-o:{ti:`They remember your name`,bo:`There was a slight risk — the room could have been dry. But you read it correctly. Two people smiled. Your manager's expression shifted from polite to genuinely engaged. You're a person to them now, not just a title.`,no:`High visibility, lower credibility. You're noticed — not yet trusted.`,lb:'High variance',d:{v:8,c:2,n:1}},nx:'s02'},
-{k:'C',t:`You prepared for this. Deliver your polished, well-structured 90-second pitch.`,
-o:{ti:`A little too rehearsed`,bo:`It was technically excellent and clearly scripted. The rhythm was off in a way people in rooms like this notice immediately. One colleague glanced at their phone. But the people who mattered noticed the preparation underneath — that part lands even when the delivery doesn't.`,no:`Preparation is good. Invisible preparation is better.`,lb:'Misfire',d:{v:-2,c:4,n:-2}},nx:'s02'}
-]},
+{t:"Keep it short and professional — name, degree, what you'll be working on. Nothing more.",
+o:{ti:'Clean and composed',bo:"You came across as measured. Nobody's impressed, but nobody's uncomfortable either. Your manager nodded once. You've set a neutral baseline — everything from here is yours to build on.",no:'The quiet confidence play. Works if you back it up with visible work fast.',lb:'Safe',d:{v:0,c:5,n:0}}},
+{t:'Show some personality — go slightly beyond the job title, mention something real.',
+o:{ti:'They remember your name',bo:"There was a slight risk — the room could have been dry. But you read it correctly. Two people smiled. Your manager's expression shifted from polite to genuinely engaged. You're a person to them now, not just a title.",no:"High visibility, lower credibility. You're noticed, not yet trusted.",lb:'High variance',d:{v:8,c:2,n:1}}},
+{t:'You prepared for this. Deliver your polished, well-structured 90-second pitch.',
+o:{ti:'A little too rehearsed',bo:"It was technically excellent and clearly scripted. The rhythm was off in a way people in rooms like this notice immediately. One colleague glanced at their phone. But the people who mattered noticed the preparation underneath — that part lands even when the delivery doesn't.",no:'Preparation is good. Invisible preparation is better.',lb:'Misfire',d:{v:-2,c:4,n:-2}}}
+],nx:'s02'},
+
 s02:{id:'s02',day:'Day 1 — Orientation',label:'02',title:'The senior colleague trap',
-sit:`A senior colleague walks you through a core process — something you studied extensively. They're explaining it like you've never encountered it. <em>You know this material better than they're presenting it.</em> There's even a factual imprecision in what they just said.`,
-ten:`How you handle being underestimated on day one follows you.`,
+sit:"A senior colleague walks you through a core process — something you studied extensively. They're explaining it like you've never encountered it. <em>You know this material better than they're presenting it.</em> There's even a factual imprecision in what they just said.",
+ten:'How you handle being underestimated on day one follows you.',
 ch:[
-{k:'A',t:`Stay quiet and absorb it — you learn more by listening than by signaling.`,
-o:{ti:`The silent play`,bo:`The logic is real — listening first is often right. You picked up nuances in how they framed things that will be useful later. The cost: you spent twenty minutes performing ignorance, which drained more energy than you expected.`,no:`Absorbing is a skill. The question is whether you ever signal what you absorbed.`,lb:'Safe but costly',d:{v:-2,c:4,n:-4}},nx:'s03'},
-{k:'B',t:`Mention you're familiar, then ask a deeper technical question to show it.`,
-o:{ti:`Smart signal`,bo:`The colleague paused when you asked your follow-up. Then the real conversation started. Your manager, walking by, slowed down and caught the last thirty seconds of the exchange. This is how you show capability without announcing it.`,no:`Questions beat corrections. Every time.`,lb:'Best outcome',d:{v:4,c:6,n:1}},nx:'s03'},
-{k:'C',t:`Correct it briefly — errors that go unchallenged become assumptions.`,
-o:{ti:`Technically right, socially expensive`,bo:`You were correct. The detail did matter. The whole room heard you — which guarantees you're visible now — but corrections on day one, in front of others, register differently from corrections in week four. The colleague smiled. It did not reach their eyes.`,no:`Being right and being effective are not the same thing yet.`,lb:'Wrong moment',d:{v:7,c:-6,n:0}},nx:'s03'}
-]},
+{t:'Stay quiet and absorb it — you learn more by listening than by signaling.',
+o:{ti:'The silent play',bo:'The logic is real — listening first is often right. You picked up nuances in how they framed things that will be useful later. The cost: you spent twenty minutes performing ignorance, which drained more energy than you expected.',no:'Absorbing is a skill. The question is whether you ever signal what you absorbed.',lb:'Safe but costly',d:{v:-2,c:4,n:-3}}},
+{t:"Mention you're familiar, then ask a deeper technical question to show it.",
+o:{ti:'Smart signal',bo:'The colleague paused when you asked your follow-up. Then the real conversation started. Your manager, walking by, slowed down and caught the last thirty seconds of the exchange. This is how you show capability without announcing it.',no:'Questions beat corrections. Every time.',lb:'Best outcome',d:{v:4,c:6,n:1}}},
+{t:'Correct it briefly — errors that go unchallenged become assumptions.',
+o:{ti:'Technically right, socially expensive',bo:'You were correct. The detail did matter. The whole room heard you — which guarantees you\'re visible now — but corrections on day one, in front of others, register differently from corrections in week four. The colleague smiled. It did not reach their eyes.',no:'Being right and being effective are not the same thing yet.',lb:'Wrong moment',d:{v:7,c:-5,n:0}}}
+],nx:'s03'},
+
 s03:{id:'s03',day:'Day 2 — First real task',label:'03',title:'The vague assignment',
-sit:`Your manager sends a message at 9:04am: <em>"Can you prepare a project status summary for tomorrow's client meeting? EOD works."</em> No template. No context on format, length, or audience. EOD is in six hours.`,
-ten:`How you handle ambiguity on a first task defines how you handle it forever.`,
+sit:'Your manager sends a message at 9:04am: <em>"Can you prepare a project status summary for tomorrow\'s client meeting? EOD works."</em> No template. No context on format, length, or audience. EOD is in six hours.',
+ten:'How you handle ambiguity on a first task defines how you handle it forever.',
 ch:[
-{k:'A',t:`Take a first pass yourself — you'll ask smarter questions once you've tried.`,
-o:{ti:`Effort without alignment`,bo:`The instinct was right — you showed initiative and your manager saw you'd tried. But four hours of good work in the wrong direction is still four hours gone. The output didn't match what they needed, and you can feel the drain.`,no:`Initiative without alignment is speed without direction.`,lb:'Misaligned',d:{v:2,c:-6,n:-5}},nx:'s04'},
-{k:'B',t:`Ask a colleague informally what format they usually use for this.`,
-o:{ti:`Efficient and right`,bo:`Your colleague pulled up an old example in under two minutes. You had the correct structure by lunch, submitted something that matched expectations precisely, and had time to make it genuinely good.`,no:`Asking colleagues is systematically underused by people who want to look capable.`,lb:'Smart',d:{v:0,c:5,n:4}},nx:'s04'},
-{k:'C',t:`Go directly to your manager and ask for clarification on format and audience.`,
-o:{ti:`Shows you think upstream`,bo:`Your manager said: "Good question — here's exactly what the client needs to see." Two minutes saved three hours. It signaled something: you think about the output before diving into the process. A small note: you used up a question early, and you're aware there's a ceiling on how many of those you can cash in.`,no:`Managers who understand work respect this. Some don't. Yours did.`,lb:'Proactive',d:{v:7,c:3,n:0}},nx:'s04'}
-]},
+{t:"Take a first pass yourself — you'll ask smarter questions once you've tried.",
+o:{ti:'Effort without alignment',bo:"The instinct was right — you showed initiative and your manager saw you'd tried. But four hours of good work in the wrong direction is still four hours gone. The output didn't match what they needed, and you can feel the drain.",no:'Initiative without alignment is speed without direction.',lb:'Misaligned',d:{v:2,c:-5,n:-4}}},
+{t:'Ask a colleague informally what format they usually use for this.',
+o:{ti:'Efficient and right',bo:'Your colleague pulled up an old example in under two minutes. You had the correct structure by lunch, submitted something that matched expectations precisely, and had time to make it genuinely good.',no:'Asking colleagues is systematically underused by people who want to look capable.',lb:'Smart',d:{v:0,c:5,n:4}}},
+{t:'Go directly to your manager and ask for clarification on format and audience.',
+o:{ti:'Shows you think upstream',bo:'Your manager said: "Good question — here\'s exactly what the client needs to see." Two minutes saved three hours. It signaled something: you think about the output before diving into the process.',no:'Managers who understand work respect this. Some don\'t. Yours did.',lb:'Proactive',d:{v:6,c:4,n:0}}}
+],nx:'s04'},
+
 s04:{id:'s04',day:'Day 2 — First real task',label:'04',title:'The group chat message',
-sit:`You've been added to the team WhatsApp. At 6pm, a senior colleague sends a voice note complaining about leadership's timeline. Four people send laughing emojis. A fire emoji. The chat goes quiet.`,
-ten:`Your first move in a new social environment becomes a data point about who you are.`,
+sit:"You've been added to the team WhatsApp. At 6pm, a senior colleague sends a voice note complaining about leadership's timeline. Four people send laughing emojis. A fire emoji. The chat goes quiet.",
+ten:'Your first move in a new social environment becomes a data point about who you are.',
 ch:[
-{k:'A',t:`React with a laughing emoji — match the energy, fit in.`,
-o:{ti:`In the room, on record`,bo:`You got a quick sense of belonging. The colleague even replied directly to you. But your manager is in this group. The chat has a memory longer than the moment. You've committed to a camp before you understand the landscape.`,no:`Social capital in new environments has a risk-adjusted cost.`,lb:'Short-term gain',d:{v:5,c:-6,n:2}},nx:'s05'},
-{k:'B',t:`Don't react at all. Read it. Put your phone down.`,
-o:{ti:`Invisible and measured`,bo:`Nobody noticed. Nobody judged. Weeks later, your manager mentioned they appreciated you were "measured" — which is the word professionals use when they've been quietly watching and approving.`,no:`Silence in a new environment reads as maturity, not indifference.`,lb:'Measured',d:{v:-2,c:5,n:0}},nx:'s05'},
-{k:'C',t:`Reply professionally, pivot the energy: "Tight timelines — let me know if I can help from my end."`,
-o:{ti:`The long-term move`,bo:`It felt slightly formal in the moment. One person sent a thumbs-up. But three months from now, when trust is established through patterns — this is the kind of early signal that matters. Your manager screenshot it and sent it to their manager.`,no:`Your written tone in work channels is a permanent record.`,lb:'Best outcome',d:{v:3,c:6,n:-2}},nx:'s05'}
-]},
+{t:'React with a laughing emoji — match the energy, fit in.',
+o:{ti:'In the room, on record',bo:"You got a quick sense of belonging. The colleague even replied directly to you. But your manager is in this group. The chat has a memory longer than the moment. You've committed to a camp before you understand the landscape.",no:'Social capital in new environments has a risk-adjusted cost.',lb:'Short-term gain',d:{v:5,c:-5,n:2}}},
+{t:"Don't react at all. Read it. Put your phone down.",
+o:{ti:'Invisible and measured',bo:'Nobody noticed. Nobody judged. Weeks later, your manager mentioned they appreciated you were "measured" — which is the word professionals use when they\'ve been quietly watching and approving.',no:'Silence in a new environment reads as maturity, not indifference.',lb:'Measured',d:{v:-1,c:5,n:0}}},
+{t:'Reply professionally, pivot the energy: "Tight timelines — let me know if I can help from my end."',
+o:{ti:'The long-term move',bo:'It felt slightly formal in the moment. One person sent a thumbs-up. But three months from now, when trust is established through patterns — this is the kind of early signal that matters. Your manager screenshot it and sent it to their manager.',no:'Your written tone in work channels is a permanent record.',lb:'Best outcome',d:{v:3,c:6,n:-1}}}
+],nx:'s05'},
+
 s05:{id:'s05',day:'Day 3 — Pressure test',label:'05',title:'The deadline clash',
-sit:`Your manager needs a deliverable by 8am tomorrow. Your professor just rescheduled an exam to the same time. <em>You cannot do both at full capacity.</em>`,
-ten:`How you handle this tells your manager more about you than a month of normal work.`,
+sit:'Your manager needs a deliverable by 8am tomorrow. Your professor just rescheduled an exam to the same time. <em>You cannot do both at full capacity.</em>',
+ten:'How you handle this tells your manager more about you than a month of normal work.',
 ch:[
-{k:'A',t:`Deliver the work. You took this job seriously and this is what that means.`,
-o:{ti:`Silent sacrifice`,bo:`The commitment was real and your manager got a solid deliverable — they noticed the reliability. What they didn't get was any signal that it cost you something. Sacrifices that aren't communicated don't build goodwill, they just become the baseline expectation. And you're running on fumes now.`,no:`Taking things seriously matters. Making the cost invisible doesn't serve you.`,lb:'Costly',d:{v:5,c:0,n:-7}},nx:'s06'},
-{k:'B',t:`Prioritize the exam. Grades compound too, and your manager doesn't know your full picture.`,
-o:{ti:`GPA protected, perception cost`,bo:`You did well on the exam. A colleague stepped in on the deliverable. Your manager noticed you weren't available and filed it away. Things get filed in ways that surface later, in rooms you're not in.`,no:`The right personal decision. A real professional cost.`,lb:'Trade-off',d:{v:-8,c:-3,n:5}},nx:'s06'},
-{k:'C',t:`Message your manager directly: explain the conflict, ask for a 24-hour extension with a specific new time.`,
-o:{ti:`Honest and specific`,bo:`"I have a rescheduled exam at 9am — I can have this to you by 11am instead of 8. Will that work?" They replied in three minutes: "Yes, that's fine." Managers who respect people remember moments like this. The asking cost you some sleep — you rehearsed the message, re-read it, worried about the tone. It was worth it. Not free.`,no:`Specific requests beat vague apologies. Always include the new deadline.`,lb:'Best outcome',d:{v:5,c:6,n:-1}},nx:'s06'}
-]},
+{t:'Deliver the work. You took this job seriously and this is what that means.',
+o:{ti:'Silent sacrifice',bo:"The commitment was real and your manager got a solid deliverable — they noticed the reliability. What they didn't get was any signal that it cost you something. Sacrifices that aren't communicated don't build goodwill, they just become the baseline expectation. And you're running on fumes now.",no:"Taking things seriously matters. Making the cost invisible doesn't serve you.",lb:'Costly',d:{v:5,c:1,n:-6}}},
+{t:"Prioritize the exam. Grades compound too, and your manager doesn't know your full picture.",
+o:{ti:'GPA protected, perception cost',bo:"You did well on the exam. A colleague stepped in on the deliverable. Your manager noticed you weren't available and filed it away. Things get filed in ways that surface later, in rooms you're not in.",no:'The right personal decision. A real professional cost.',lb:'Trade-off',d:{v:-6,c:-3,n:4}}},
+{t:'Message your manager directly: explain the conflict, ask for a 24-hour extension with a specific new time.',
+o:{ti:'Honest and specific',bo:'"I have a rescheduled exam at 9am — I can have this to you by 11am instead of 8. Will that work?" They replied in three minutes: "Yes, that\'s fine." Managers who respect people remember moments like this.',no:'Specific requests beat vague apologies. Always include the new deadline.',lb:'Best outcome',d:{v:5,c:7,n:-1}}}
+],nx:'s06'},
+
 s06:{id:'s06',day:'Day 3 — Pressure test',label:'06',title:'You spot a mistake',
-sit:`Reviewing a report your team will present to a client tomorrow, you find a data error. The numbers don't reconcile. <em>It's not your work. The person who wrote it is two levels senior to you.</em>`,
-ten:`What you do when you see a problem that isn't technically yours defines your character here.`,
+sit:"Reviewing a report your team will present to a client tomorrow, you find a data error. The numbers don't reconcile. <em>It's not your work. The person who wrote it is two levels senior to you.</em>",
+ten:"What you do when you see a problem that isn't technically yours defines your character here.",
 ch:[
-{k:'A',t:`Fix it quietly — protecting the team without making it political is its own skill.`,
-o:{ti:`Fixed but invisible`,bo:`You were right that it didn't need to be political. The fix worked and protected the team — that's a real contribution even if nobody can see it. But the colleague will never know to trust you, and your manager will never know you caught it. Quiet competence in week one is indistinguishable from absence.`,no:`Protecting people quietly is good. Protecting people in a way they can see is better.`,lb:'Invisible',d:{v:-3,c:4,n:-2}},nx:'s07a'},
-{k:'B',t:`Message the colleague privately before end of day — flag it quietly, give them the chance to fix it.`,
-o:{ti:`The trust-building move`,bo:`The colleague came back fifteen minutes later: "You're completely right — thank you." They mentioned it to your manager. Your manager brought it up to you the next morning, casually. This is exactly how professional reputations get built. You spent twenty minutes drafting the right tone — that's real work.`,no:`Protecting the team is always better than protecting your comfort. Composing the message well takes energy.`,lb:'Best outcome',d:{v:4,c:6,n:0}},nx:'s07b'},
-{k:'C',t:`Stay in your lane — flagging other people's errors in week one creates enemies fast.`,
-o:{ti:`The error surfaces`,bo:`The logic was defensible. Your evening was protected. But when the error surfaced in the client meeting, the room went quiet. During the debrief, it emerged the report had been shared for review. You had seen it. The lane you stayed in had a cost you didn't price.`,no:`Staying in your lane is sometimes right. Staying silent on something you saw is different.`,lb:'Damaging',d:{v:-6,c:-8,n:4}},nx:'s07a'}
-]},
+{t:'Fix it quietly — protecting the team without making it political is its own skill.',
+o:{ti:'Fixed but invisible',bo:"You were right that it didn't need to be political. The fix worked and protected the team — that's a real contribution even if nobody can see it. But the colleague will never know to trust you, and your manager will never know you caught it.",no:'Protecting people quietly is good. Protecting people in a way they can see is better.',lb:'Invisible',d:{v:-2,c:4,n:-2}},nxOverride:'s07a'},
+{t:'Message the colleague privately before end of day — flag it quietly, give them the chance to fix it.',
+o:{ti:'The trust-building move',bo:'The colleague came back fifteen minutes later: "You\'re completely right — thank you." They mentioned it to your manager. Your manager brought it up to you the next morning, casually. This is exactly how professional reputations get built.',no:'Protecting the team is always better than protecting your comfort.',lb:'Best outcome',d:{v:4,c:7,n:0}},nxOverride:'s07b'},
+{t:'Stay in your lane — flagging other people\'s errors in week one creates enemies fast.',
+o:{ti:'The error surfaces',bo:'The logic was defensible. Your evening was protected. But when the error surfaced in the client meeting, the room went quiet. During the debrief, it emerged the report had been shared for review. You had seen it. The lane you stayed in had a cost you didn\'t price.',no:'Staying in your lane is sometimes right. Staying silent on something you saw is different.',lb:'Damaging',d:{v:-5,c:-6,n:3}},nxOverride:'s07a'}
+],nx:'s07a'},
+
 s07a:{id:'s07a',day:'Day 4 — Politics',label:'07',title:'Two managers, one intern',
-sit:`A department head approaches you directly: <em>"I heard you're sharp with data. We have a small analysis — shouldn't take more than half a day."</em> Your direct manager didn't approve this. You have the capacity.`,
-ten:`Every yes you give outside your direct chain is a decision about trust and loyalty.`,
+sit:'A department head approaches you directly: <em>"I heard you\'re sharp with data. We have a small analysis — shouldn\'t take more than half a day."</em> Your direct manager didn\'t approve this. You have the capacity.',
+ten:'Every yes you give outside your direct chain is a decision about trust and loyalty.',
 ch:[
-{k:'A',t:`Say yes immediately. More exposure, more experience.`,
-o:{ti:`Your manager found out`,bo:`You completed the analysis. Good work, and now two departments have seen you operate. Then your manager asked what you'd been working on. There was a pause. They said "I see" and moved on. Those two words, in that tone, follow you to the next project discussion.`,no:`Chain of command exists because organizations need predictability. You just reduced yours.`,lb:'Protocol breach',d:{v:6,c:-8,n:-1}},nx:'s08'},
-{k:'B',t:`Say you'd love to help, but you need to check with your direct manager first.`,
-o:{ti:`Correct protocol, full upside`,bo:`Your manager approved it in three minutes. You completed the work. Both managers have now seen you operate correctly. You gained cross-functional visibility while staying inside the right structure. The coordination overhead was real — three messages, two waits.`,no:`The correct move is usually also the strategically optimal one. It's not free.`,lb:'Best outcome',d:{v:6,c:5,n:-2}},nx:'s08'},
-{k:'C',t:`Decline politely. Stay focused on your own team's priorities.`,
-o:{ti:`Focused, but a missed signal`,bo:`Your manager heard you'd declined and said nothing — they noted the discipline. What you didn't know: the other team's project became a major cross-functional initiative. The people who helped early got pulled into the core team.`,no:`Saying no always costs something. The question is whether you're pricing it correctly.`,lb:'Opportunity cost',d:{v:-3,c:2,n:4}},nx:'s08'}
-]},
+{t:'Say yes immediately. More exposure, more experience.',
+o:{ti:'Your manager found out',bo:'You completed the analysis. Good work, and now two departments have seen you operate. Then your manager asked what you\'d been working on. There was a pause. They said "I see" and moved on. Those two words, in that tone, follow you to the next project discussion.',no:'Chain of command exists because organizations need predictability. You just reduced yours.',lb:'Protocol breach',d:{v:5,c:-6,n:-1}}},
+{t:"Say you'd love to help, but you need to check with your direct manager first.",
+o:{ti:'Correct protocol, full upside',bo:'Your manager approved it in three minutes. You completed the work. Both managers have now seen you operate correctly. You gained cross-functional visibility while staying inside the right structure.',no:'The correct move is usually also the strategically optimal one.',lb:'Best outcome',d:{v:6,c:6,n:-1}}},
+{t:"Decline politely. Stay focused on your own team's priorities.",
+o:{ti:'Focused, but a missed signal',bo:"Your manager heard you'd declined and said nothing — they noted the discipline. What you didn't know: the other team's project became a major cross-functional initiative. The people who helped early got pulled into the core team.",no:'Saying no always costs something. The question is whether you\'re pricing it correctly.',lb:'Opportunity cost',d:{v:-2,c:2,n:3}}}
+],nx:'s08'},
+
 s07b:{id:'s07b',day:'Day 4 — Politics',label:'07',alt:true,title:'The unexpected meeting invite',
-sit:`Your manager adds you to a calendar invite: "Client Strategy — Core Team." Seven names on the invite. <em>You are the most junior person on the list by a significant margin.</em> No explanation for why you were included. The meeting is tomorrow.`,
-ten:`There is no consensus professional answer here. What you do depends on how you read the room you haven't entered yet.`,
+sit:'Your manager adds you to a calendar invite: "Client Strategy — Core Team." Seven names on the invite. <em>You are the most junior person on the list by a significant margin.</em> No explanation for why you were included. The meeting is tomorrow.',
+ten:'There is no consensus professional answer here. What you do depends on how you read the room you haven\'t entered yet.',
 ch:[
-{k:'A',t:`Prepare extensively — research every person on the invite, study the client background.`,
-o:{ti:`Prepared but visible`,bo:`You arrived knowing more context than most people in the room. When you spoke, it was precise. The preparation also showed — one person noted "you really did your homework," which was meant as a compliment but also as an observation. You spent most of the night before on it. That cost is real, and some of the senior people in the room read heavy preparation as a junior signal.`,no:`Preparation has an output. It also has a tell.`,lb:'Deep prep',d:{v:4,c:4,n:-7}},nx:'s08'},
-{k:'B',t:`Attend normally. Track carefully, speak when called on, don't force a contribution.`,
-o:{ti:`Quietly present`,bo:`You didn't try to manufacture a moment. You followed the arc of the conversation, understood most of it, and when your manager asked you a direct question near the end, you answered cleanly. The room noticed you were composed rather than keen. That's a specific kind of visibility — the one most first-weeks can't pull off.`,no:`Being in the room without forcing presence is harder than it looks. When it works, it reads as senior.`,lb:'Present',d:{v:6,c:3,n:-1}},nx:'s08'},
-{k:'C',t:`Message your manager before the meeting: ask if there's anything specific they want you to contribute.`,
-o:{ti:`Asked for a role`,bo:`Your manager replied: "Good question — I want you to track the action items and flag any data gaps." You walked in with a defined purpose. You delivered on it cleanly. The message did signal that you wanted scaffolding before being comfortable — which some managers respect and some notice quietly.`,no:`Asking for a role is a specific kind of move. It reveals how you prefer to operate.`,lb:'Role request',d:{v:3,c:5,n:-2}},nx:'s08'}
-]},
+{t:'Prepare extensively — research every person on the invite, study the client background.',
+o:{ti:'Prepared but visible',bo:"You arrived knowing more context than most people in the room. When you spoke, it was precise. The preparation also showed — one person noted \"you really did your homework,\" which was meant as a compliment but also as an observation. You spent most of the night before on it.",no:'Preparation has an output. It also has a tell.',lb:'Deep prep',d:{v:3,c:5,n:-6}}},
+{t:"Attend normally. Track carefully, speak when called on, don't force a contribution.",
+o:{ti:'Quietly present',bo:"You didn't try to manufacture a moment. You followed the arc of the conversation, understood most of it, and when your manager asked you a direct question near the end, you answered cleanly. The room noticed you were composed rather than keen.",no:'Being in the room without forcing presence is harder than it looks.',lb:'Present',d:{v:6,c:4,n:-1}}},
+{t:"Message your manager before the meeting: ask if there's anything specific they want you to contribute.",
+o:{ti:'Asked for a role',bo:'Your manager replied: "Good question — I want you to track the action items and flag any data gaps." You walked in with a defined purpose. You delivered on it cleanly.',no:'Asking for a role is a specific kind of move. It reveals how you prefer to operate.',lb:'Role request',d:{v:3,c:6,n:-1}}}
+],nx:'s08'},
+
 s08:{id:'s08',day:'Day 4 — Politics',label:'08',title:'The after-work invite',
-sit:`The full team is going out after work. Your manager will be there. You're running on low energy. You also have an 8am class tomorrow. <em>But the entire team is going.</em>`,
-ten:`How you protect your energy while staying visible is a skill most people take years to develop.`,
+sit:"The full team is going out after work. Your manager will be there. You're running on low energy. You also have an 8am class tomorrow. <em>But the entire team is going.</em>",
+ten:'How you protect your energy while staying visible is a skill most people take years to develop.',
 ch:[
-{k:'A',t:`Go and stay the whole night. Team relationships are built in these moments.`,
-o:{ti:`You stayed. You paid.`,bo:`It was a genuinely good night. Two colleagues opened up in ways they wouldn't in a meeting room. You got closer to people. You also got home at 1am and showed up on Friday visibly running on empty. The energy debt didn't just affect Friday — it affected everything that followed.`,no:`Energy debt compounds. You cannot outperform a depleted baseline.`,lb:'High cost',d:{v:7,c:0,n:-10}},nx:'s09'},
-{k:'B',t:`Go for an hour. Be genuinely present. Leave cleanly with a real reason.`,
-o:{ti:`Presence over duration`,bo:`You stayed for the first round. You were actually there — no phone, real conversations. Then you left clearly: "Early morning, but this was great." Your manager smiled. There's a specific thing that happens in hour two and three of these nights — the conversation shifts, people get more candid. You weren't there for that.`,no:`Boundaries communicated with warmth are respected. They also cost you specific access.`,lb:'Hour and out',d:{v:4,c:3,n:-3}},nx:'s09'},
-{k:'C',t:`Skip it. Send a genuine message saying you have an early commitment.`,
-o:{ti:`Read the room wrong`,bo:`Your message was warm. But the team bonded over something that evening and you weren't part of it. These exclusions are rarely intentional. They compound quietly over weeks until you notice you're slightly outside something you can't name.`,no:`Energy saved, connection cost. Sometimes the trade is wrong.`,lb:'Isolation risk',d:{v:-8,c:0,n:6}},nx:'s09'}
-]},
+{t:'Go and stay the whole night. Team relationships are built in these moments.',
+o:{ti:'You stayed. You paid.',bo:"It was a genuinely good night. Two colleagues opened up in ways they wouldn't in a meeting room. You got closer to people. You also got home at 1am and showed up on Friday visibly running on empty.",no:'Energy debt compounds. You cannot outperform a depleted baseline.',lb:'High cost',d:{v:7,c:1,n:-8}}},
+{t:'Go for an hour. Be genuinely present. Leave cleanly with a real reason.',
+o:{ti:'Presence over duration',bo:'You stayed for the first round. You were actually there — no phone, real conversations. Then you left clearly: "Early morning, but this was great." Your manager smiled.',no:'Boundaries communicated with warmth are respected. They also cost you specific access.',lb:'Hour and out',d:{v:5,c:4,n:-2}}},
+{t:'Skip it. Send a genuine message saying you have an early commitment.',
+o:{ti:'Read the room wrong',bo:"Your message was warm. But the team bonded over something that evening and you weren't part of it. These exclusions are rarely intentional. They compound quietly over weeks until you notice you're slightly outside something you can't name.",no:'Energy saved, connection cost. Sometimes the trade is wrong.',lb:'Isolation risk',d:{v:-6,c:0,n:5}}}
+],nx:'s09'},
+
 s09:{id:'s09',day:'Day 5 — The verdict',label:'09',title:'End of week check-in',
-sit:`Your manager calls you for a 15-minute meeting: <em>"Just checking in — how do you feel the week went?"</em> This is the first time you've had one-on-one time since day one. You don't know what kind of response they want.`,
-ten:`Different managers want different things in moments like this. The one sitting across from you has not given you enough data to know which kind they are.`,
+sit:'Your manager calls you for a 15-minute meeting: <em>"Just checking in — how do you feel the week went?"</em> This is the first time you\'ve had one-on-one time since day one. You don\'t know what kind of response they want.',
+ten:'Different managers want different things in moments like this.',
 ch:[
-{k:'A',t:`Be honest. Name what was hard, what you learned, what you'd do differently.`,
-o:{ti:`Candid`,bo:`"I noticed you struggled a bit with the format on Wednesday but figured it out quickly." They had already seen it. You naming it first transformed what it meant — but in naming it, you also made yourself slightly smaller in the room. Some managers hear candor and respect it. Some hear it and quietly update their confidence in you downward. You don't know which one you have yet.`,no:`Candor is a bet on the listener. Read carefully before you place it.`,lb:'Candid',d:{v:0,c:6,n:2}},nx:'s10'},
-{k:'B',t:`Lead with your wins. You're being evaluated — frame your week the way you'd frame a deliverable.`,
-o:{ti:`Owning the narrative`,bo:`The framing instinct was smart. You presented a coherent arc for the week — what you learned, what you contributed. Your manager listened, then said: "And the Wednesday thing?" There was a gap between your narrative and theirs. Some managers read this as confidence and file it positively. Others read it as selective. Both are happening here.`,no:`Framing is a skill. It is also an assertion.`,lb:'Confident',d:{v:5,c:2,n:0}},nx:'s10'},
-{k:'C',t:`Ask for their feedback before you say anything about yourself.`,
-o:{ti:`Listening posture`,bo:`"I appreciate that." They shared three observations — two positive, one developmental. Because you listened first, you responded to what actually mattered to them. The trade: you spent the meeting entirely in their frame. Your own sense of the week never surfaced. Some managers wanted to know how you read it yourself.`,no:`Listening first is a real skill. It is also a choice not to drive.`,lb:'Listening',d:{v:2,c:5,n:1}},nx:'s10'}
-]},
+{t:"Be honest. Name what was hard, what you learned, what you'd do differently.",
+o:{ti:'Candid',bo:'"I noticed you struggled a bit with the format on Wednesday but figured it out quickly." They had already seen it. You naming it first transformed what it meant — but in naming it, you also made yourself slightly smaller in the room.',no:'Candor is a bet on the listener. Read carefully before you place it.',lb:'Candid',d:{v:0,c:6,n:2}}},
+{t:"Lead with your wins. You're being evaluated — frame your week the way you'd frame a deliverable.",
+o:{ti:'Owning the narrative',bo:'The framing instinct was smart. You presented a coherent arc for the week — what you learned, what you contributed. Your manager listened, then said: "And the Wednesday thing?" There was a gap between your narrative and theirs.',no:'Framing is a skill. It is also an assertion.',lb:'Confident',d:{v:5,c:2,n:0}}},
+{t:'Ask for their feedback before you say anything about yourself.',
+o:{ti:'Listening posture',bo:'"I appreciate that." They shared three observations — two positive, one developmental. Because you listened first, you responded to what actually mattered to them.',no:'Listening first is a real skill. It is also a choice not to drive.',lb:'Listening',d:{v:2,c:5,n:1}}}
+],nx:'s10'},
+
 s10:{id:'s10',day:'Day 5 — The verdict',label:'10',title:'The opportunity drop',
-sit:`At the end of your check-in, your manager adds: <em>"There's a larger project starting next month — cross-functional, client-facing, visible internally. We'd consider involving you if you're interested."</em> This wasn't offered to the other interns.`,
-ten:`How you respond to an unexpected opportunity reveals your judgment under pressure.`,
+sit:'At the end of your check-in, your manager adds: <em>"There\'s a larger project starting next month — cross-functional, client-facing, visible internally. We\'d consider involving you if you\'re interested."</em> This wasn\'t offered to the other interns.',
+ten:'How you respond to an unexpected opportunity reveals your judgment under pressure.',
 ch:[
-{k:'A',t:`Say yes immediately. You're not passing this up.`,
-o:{ti:`Committed without information`,bo:`You said yes. Your commitment was visible — everyone heard it. Two weeks later you discovered the project runs directly through your final exam period. You're fully committed now. Enthusiasm is valuable. Enthusiasm without information is just speed without direction.`,no:`Yes is a contract. Read the terms first.`,lb:'Uninformed',d:{v:7,c:-4,n:-3}},nx:'s11'},
-{k:'B',t:`Express genuine interest, then ask what the scope and time commitment look like.`,
-o:{ti:`Scoping before committing`,bo:`They walked you through the project. You asked two precise follow-up questions. The information was useful. The question also did something subtle: it deferred commitment past the moment they wanted it. Some managers interpret this as mature due diligence. Some feel a door close softly when they wanted a yes.`,no:`Thoughtful interest is a real move. It also changes the temperature of the offer.`,lb:'Scoping',d:{v:3,c:5,n:0}},nx:'s11'},
-{k:'C',t:`Before committing, ask them to walk you through the scope — you want to make sure you can actually deliver.`,
-o:{ti:`Confirming fit`,bo:`"That's actually very useful to know upfront." They scoped your involvement accordingly. You delivered fully on what you committed to. The trade: you framed yourself as a deliverer, not a leader.`,no:`Knowing your limits and stating them early is a senior skill. It can also be a cap.`,lb:'Confirming',d:{v:2,c:5,n:2}},nx:'s11'}
-]},
-s11:{id:'s11',day:'Day 5 — Final hours',label:'11',title:'The colleague asks for a favor',
-sit:`A colleague catches you before you leave: <em>"I know this is a big ask, but I'm behind on a submission. Could you look over my draft tonight? Thirty minutes max."</em> You're exhausted.`,
-ten:`Small favors in a first week define the kind of colleague you become.`,
+{t:"Say yes immediately. You're not passing this up.",
+o:{ti:'Committed without information',bo:"You said yes. Your commitment was visible — everyone heard it. Two weeks later you discovered the project runs directly through your final exam period. You're fully committed now. Enthusiasm is valuable. Enthusiasm without information is just speed without direction.",no:'Yes is a contract. Read the terms first.',lb:'Uninformed',d:{v:6,c:-3,n:-2}}},
+{t:'Express genuine interest, then ask what the scope and time commitment look like.',
+o:{ti:'Scoping before committing',bo:'They walked you through the project. You asked two precise follow-up questions. The information was useful. Some managers interpret this as mature due diligence. Some feel a door close softly when they wanted a yes.',no:'Thoughtful interest is a real move.',lb:'Scoping',d:{v:4,c:5,n:0}}},
+{t:"Before committing, ask them to walk you through the scope — you want to make sure you can actually deliver.",
+o:{ti:'Confirming fit',bo:'"That\'s actually very useful to know upfront." They scoped your involvement accordingly. You delivered fully on what you committed to. The trade: you framed yourself as a deliverer, not a leader.',no:'Knowing your limits and stating them early is a senior skill.',lb:'Confirming',d:{v:2,c:5,n:2}}}
+],nx:'s11'},
+
+s11:{id:'s11',day:'Day 5 — Final hours',label:'11',title:'The Friday message',
+sit:"It's 5:30pm on Friday. You're about to close your laptop. A new message from your manager: <em>\"Quick question — do you have the original data file from the Wednesday report? Need it for something next week.\"</em>",
+ten:"Small responsiveness signals compound into a reputation you don't fully control.",
 ch:[
-{k:'A',t:`Say yes. You can find thirty minutes.`,
-o:{ti:`The deposit`,bo:`You read the draft at 9pm. Left three specific, useful comments. They responded: "This is exactly what I needed." Small acts of genuine help in the first week get remembered disproportionately. It also cost you a full hour of your evening and you can feel it.`,no:`Favors in a new environment compound at unusually high rates.`,lb:'Good investment',d:{v:3,c:5,n:-5}},nx:'s12'},
-{k:'B',t:`Be honest — you're too depleted tonight, but offer to help tomorrow morning before the submission.`,
-o:{ti:`Honest and reliable`,bo:`They appreciated the honesty. You gave them thirty minutes the next morning — better work than you'd have done exhausted. They submitted on time. You kept your word.`,no:`Reliability on small commitments builds more trust than enthusiasm on large ones.`,lb:'Reliable',d:{v:0,c:5,n:-1}},nx:'s12'},
-{k:'C',t:`Decline. You genuinely cannot take anything else on tonight.`,
-o:{ti:`Boundary held`,bo:`You said no clearly but warmly. They understood. You protected your energy. People who ask favors and get a genuine no generally respect it more than a reluctant yes.`,no:`Saying no is fine. The question is whether you have a pattern to stand on.`,lb:'Boundary',d:{v:-2,c:1,n:4}},nx:'s12'}
-]},
-s12:{id:'s12',day:'Day 5 — Final hours',label:'12',title:'The overheard conversation',
-sit:`You're getting coffee before heading out. You overhear your manager talking to someone on the phone: <em>"The new one has good instincts — just needs to decide what kind of professional they want to be."</em> They don't know you heard. You can't tell from tone whether this is concern or encouragement.`,
-ten:`Information you weren't meant to have is the hardest kind to act on well.`,
+{t:'Send it now with a brief note explaining the file structure.',
+o:{ti:'Four minutes that matter',bo:'You sent it clean and clear. Your manager replied: "Perfect — have a good weekend." It took four minutes. The signal it sent was about an order of magnitude larger than the effort.',no:'Only do this if you can sustain it. Baselines you set stick.',lb:'Reliable',d:{v:2,c:6,n:-2}}},
+{t:'Reply that you have it and will send it first thing Monday morning.',
+o:{ti:'Clear and boundaried',bo:'Your manager replied: "No problem, Monday works." Clean. Professional. You protected your weekend without sacrificing the relationship.',no:'Acknowledging and deferring is always better than silence.',lb:'Balanced',d:{v:1,c:3,n:2}}},
+{t:"Don't respond until Monday. You're done for the week.",
+o:{ti:'Silence reads as absence',bo:'Your manager waited. They eventually found the file themselves. On Monday they mentioned it in passing. In a first week, every data point is weighted more heavily than it will be in month three.',no:'The cost here is not the task. It is what the silence communicated.',lb:'Misread',d:{v:-3,c:-4,n:4}}}
+],nx:'s12'},
+
+s12:{id:'s12',day:'Day 5 — Final hours',label:'12',title:'The last thing',
+sit:'Monday morning. Your manager sends you a message: <em>"We\'re putting together the team for next quarter\'s flagship project. I\'m going to recommend you for a spot. Wanted you to hear it from me first."</em>',
+ten:"This is not really a decision. It's a mirror.",
 ch:[
-{k:'A',t:`Let it go. Acting on partial information is how relationships get damaged.`,
-o:{ti:`Sitting with it`,bo:`You held the phrase privately. The restraint itself is a real discipline — you declined to weaponize overheard data. You carried the ambiguity for the rest of the day, though. Some of your decisions on Friday had an extra layer of second-guessing behind them that nobody else could see.`,no:`The discipline to not act on partial information is underrated. It is not free of cost.`,lb:'Sitting with it',d:{v:1,c:3,n:-2}},nx:'s13'},
-{k:'B',t:`Bring it up with your manager directly: ask if there's feedback you should know.`,
-o:{ti:`Direct ask`,bo:`Your manager paused when you asked. Some managers appreciate the directness — they see someone seeking clarity. Others read it as: you couldn't sit with ambiguity for twenty-four hours, which is a kind of insecurity. Yours responded politely and gave you a softer version than the original. You don't know which read landed.`,no:`Directness is visible. It is also a disclosure of what you couldn't tolerate not knowing.`,lb:'Direct ask',d:{v:4,c:2,n:-1}},nx:'s13'},
-{k:'C',t:`Ask a colleague casually if they know what your manager thinks of your first week.`,
-o:{ti:`Triangulating`,bo:`Your colleague gave you their read on your manager's general personality, which wasn't what you asked. Word that you'd been asking around made its way back — not damagingly, but noticeably. You gathered some soft network information and gave up some standing for it.`,no:`Indirect intelligence has a price. The price shows up in other people's impressions of you.`,lb:'Indirect',d:{v:2,c:-3,n:0}},nx:'s13'}
-]},
-s13:{id:'s13',day:'Day 5 — Final hours',label:'13',title:'The Friday message',
-sit:`It's 5:30pm on Friday. You're about to close your laptop. A new message from your manager: <em>"Quick question — do you have the original data file from the Wednesday report? Need it for something next week."</em>`,
-ten:`Small responsiveness signals compound into a reputation you don't fully control.`,
-ch:[
-{k:'A',t:`Send it now with a brief note explaining the file structure.`,
-o:{ti:`Four minutes that matter`,bo:`You sent it clean and clear. Your manager replied: "Perfect — have a good weekend." It took four minutes. The signal it sent was about an order of magnitude larger than the effort. The effort, however, broke your mental transition into the weekend.`,no:`Only do this if you can sustain it. Baselines you set stick.`,lb:'Reliable',d:{v:2,c:6,n:-3}},nx:'s14'},
-{k:'B',t:`Reply that you have it and will send it first thing Monday morning.`,
-o:{ti:`Clear and boundaried`,bo:`Your manager replied: "No problem, Monday works." Clean. Professional. You protected your weekend without sacrificing the relationship.`,no:`Acknowledging and deferring is always better than silence.`,lb:'Balanced',d:{v:0,c:2,n:2}},nx:'s14'},
-{k:'C',t:`Don't respond until Monday. You're done for the week.`,
-o:{ti:`Silence reads as absence`,bo:`Your manager waited. They eventually found the file themselves. On Monday they mentioned it in passing. In a first week, every data point is weighted more heavily than it will be in month three.`,no:`The cost here is not the task. It is what the silence communicated.`,lb:'Misread',d:{v:-5,c:-5,n:5}},nx:'s14'}
-]},
-s14:{id:'s14',day:'Day 5 — Final hours',label:'14',title:'Reflecting on the week',
-sit:`You're on your way home. The week is done. <em>Your manager said "decide what kind of professional you want to be."</em> This is the first moment you've had to actually think about that.`,
-ten:`The decisions you make about how to process experience determine how fast you grow.`,
-ch:[
-{k:'A',t:`Write it down. Every significant moment this week — what you did, what you'd change.`,
-o:{ti:`The compound move`,bo:`You wrote for twenty minutes. Some of it was uncomfortable to read back. Seeing your decisions as a sequence rather than isolated events showed you something about your default patterns. This twenty minutes will be worth more than ten hours of future work.`,no:`The debrief is the skill. Most people skip it. It is not pure rest.`,lb:'Best habit',d:{v:2,c:4,n:2}},nx:'s15'},
-{k:'B',t:`Call someone you trust and talk through it.`,
-o:{ti:`External processing`,bo:`You talked for forty minutes. The other person asked two questions that reframed things in ways you hadn't considered. Processing with someone who knows you but isn't in your workplace gives you a perspective you can't get from inside the situation.`,no:`Your external network is part of your professional infrastructure.`,lb:'Good',d:{v:0,c:2,n:4}},nx:'s15'},
-{k:'C',t:`Decompress. Stop thinking about work. You've earned the rest.`,
-o:{ti:`Reset is real`,bo:`You disconnected completely. You recharged in a way you couldn't have otherwise. The risk is that the patterns from this week remain unexamined and repeat. Rest is not optional. Reflection is also not optional.`,no:`Rest without reflection is recovery without learning.`,lb:'Neutral',d:{v:-1,c:0,n:7}},nx:'s15'}
-]},
-s15:{id:'s15',day:'Day 5 — Final hours',label:'15',title:'The last thing',
-sit:`Monday morning. Your manager sends you a message: <em>"We're putting together the team for next quarter's flagship project. I'm going to recommend you for a spot. Wanted you to hear it from me first."</em>`,
-ten:`This is not really a decision. It's a mirror.`,
-ch:[
-{k:'A',t:`"Thank you. I won't let you down."`,
-o:{ti:`The promise`,bo:`Simple. Direct. No performance. Your manager read it and forwarded it to the project lead: "This is who I'm recommending." The week you just had either earned this moment or it didn't.`,no:`Your week speaks. This message just ends the sentence.`,lb:'Clean',d:{v:4,c:5,n:0}},nx:null},
-{k:'B',t:`Before committing, ask them to walk you through what the role involves.`,
-o:{ti:`The right question, again`,bo:`Your manager replied: "Yes — I'm glad you asked. Let me walk you through it properly." You entered the project with full information and a defined role. The question very slightly tempered the warmth of the moment — they wanted excitement, you gave them diligence.`,no:`You asked the same question that changed week one. It changed this moment too. The tradeoff was real.`,lb:'Asking',d:{v:3,c:6,n:0}},nx:null},
-{k:'C',t:`"This means a lot. I've been thinking about exactly this kind of growth."`,
-o:{ti:`The authentic response`,bo:`Your manager smiled reading it. "That's what I wanted to hear." The specificity — that you'd been thinking about it, that it aligned with something you were working toward — made it land differently from a generic thank-you.`,no:`Authenticity in professional communication is rarer than it should be.`,lb:'Genuine',d:{v:2,c:5,n:3}},nx:null}
-]}
+{t:'"Thank you. I won\'t let you down."',
+o:{ti:'The promise',bo:'Simple. Direct. No performance. Your manager read it and forwarded it to the project lead: "This is who I\'m recommending." The week you just had either earned this moment or it didn\'t.',no:'Your week speaks. This message just ends the sentence.',lb:'Clean',d:{v:3,c:4,n:0}}},
+{t:'Before committing, ask them to walk you through what the role involves.',
+o:{ti:'The right question, again',bo:'Your manager replied: "Yes — I\'m glad you asked. Let me walk you through it properly." You entered the project with full information and a defined role. The question very slightly tempered the warmth of the moment.',no:'You asked the same question that changed week one. It changed this moment too.',lb:'Asking',d:{v:2,c:5,n:0}}},
+{t:'"This means a lot. I\'ve been thinking about exactly this kind of growth."',
+o:{ti:'The authentic response',bo:'Your manager smiled reading it. "That\'s what I wanted to hear." The specificity — that you\'d been thinking about it, that it aligned with something you were working toward — made it land differently from a generic thank-you.',no:'Authenticity in professional communication is rarer than it should be.',lb:'Genuine',d:{v:2,c:4,n:2}}}
+],nx:null}
 };
 
+// ═══════════════════════════════════════════════════════════════
+// ENDINGS
+// Burnout is a HARD GATE — fires first if energy critically low,
+// regardless of other stats (user's explicit design choice).
+// Thresholds tuned for ~40% Rising Star among thoughtful plays.
+// ═══════════════════════════════════════════════════════════════
+
 var ENDINGS = [
-{test:function(s){return s.n<26},kick:'// Ending 04 — The energy failure',title:'The\nBurnout.',color:'#a78bfa',
-body:`You made it through the week but the decisions in the second half show the cost. The pattern is clear: when your energy depleted, your judgment degraded. You started making reactive choices instead of considered ones. The week didn't break you. But you can feel exactly where it could.`,
-adv:`Energy management is the meta-skill that determines the quality of every other skill you have. Before next week, identify the one thing that drains you fastest and build one non-negotiable recovery habit around it. Protect it like a deadline.`},
-{test:function(s){return s.c>=78&&s.v>=75},kick:'// Ending 01 — The ideal outcome',title:'The Rising\nStar.',color:'#c8ff00',
-body:`Your manager is recommending you for the next project before the week is officially over. You threaded the needle — visible enough to be remembered, credible enough to be trusted. This combination is genuinely rare. Most people optimize for one at the cost of the other. You didn't.`,
-adv:`You have a window of momentum. Schedule a proper 1:1 with your manager in week two — not to impress, but to get clear on what the next 90 days should look like. The people who rise fast work on the right things.`},
-{test:function(s){return s.c>=72&&s.v<75},kick:'// Ending 02 — The ceiling problem',title:'The Trusted\nOperator.',color:'#4db8ff',
-body:`People trust your judgment. They rely on your work. They just don't think of you when the room is deciding who to put on the high-visibility project. Credibility without visibility is a career ceiling — you're competent and present, but invisible in the moments that shape trajectories.`,
-adv:`Pick one deliberate visibility action per week. Speak first in the next meeting. Offer to present the thing you usually just prepare. The gap closes through reps, not through a single moment.`},
-{test:function(s){return s.v>=72&&s.c<78},kick:'// Ending 03 — The perception gap',title:'The\nEager One.',color:'#ffc940',
-body:`Everyone knows your name. Not everyone fully trusts your judgment yet. You moved fast, showed up strongly, made your presence felt — and a few decisions left a residue that people noticed. The raw material is excellent. The pattern needs adjusting.`,
-adv:`Before your next instinct to move fast, add one clarifying question. In your next meeting, respond once less than you naturally would and make the one response count.`},
-{test:function(s){return s.v>=50&&s.c>=50},kick:'// Ending 05 — Solid foundation',title:'The\nCalculated.',color:'#a78bfa',
-body:`A solid first week. Not spectacular, but real. You made thoughtful calls more often than not, managed your energy reasonably, and left the week with your reputation intact and your manager's confidence established.`,
-adv:`You have a clean slate and a functional baseline. The next step isn't about fixing weaknesses — it's about choosing one area to develop intentionally. Pick the meter that's lowest and design one specific behavior to move it over the next four weeks.`},
-{test:function(){return true},kick:'// Ending 06 — The honest start',title:'The\nRebuilding.',color:'#94a3b8',
-body:`The week was hard and it showed. The combination of decisions you made left your meters below where they needed to be. This doesn't mean the job is over. First weeks are data, not verdicts. But you're starting week two with a deficit to recover from rather than momentum to build on.`,
-adv:`Don't pretend the week went better than it did. Have one honest conversation with your manager this week — not to apologize, but to demonstrate that you see what happened and are adjusting.`}
+{id:'burnout',test:function(s){return s.n<25},kick:'// Ending 04 — The energy failure',title:'The\nBurnout.',color:'#a78bfa',
+body:'You made it through the week but the decisions in the second half show the cost. The pattern is clear: when your energy depleted, your judgment degraded. You started making reactive choices instead of considered ones. The week didn\'t break you. But you can feel exactly where it could.',
+adv:'Energy management is the meta-skill that determines the quality of every other skill you have. Before next week, identify the one thing that drains you fastest and build one non-negotiable recovery habit around it. Protect it like a deadline.'},
+
+{id:'rising',test:function(s){return s.c>=80&&s.v>=75},kick:'// Ending 01 — The ideal outcome',title:'The Rising\nStar.',color:'#c8ff00',
+body:"Your manager is recommending you for the next project before the week is officially over. You threaded the needle — visible enough to be remembered, credible enough to be trusted. This combination is genuinely rare. Most people optimize for one at the cost of the other. You didn't.",
+adv:'You have a window of momentum. Schedule a proper 1:1 with your manager in week two — not to impress, but to get clear on what the next 90 days should look like. The people who rise fast work on the right things.'},
+
+{id:'trusted',test:function(s){return s.c>=65&&s.v<68},kick:'// Ending 02 — The ceiling problem',title:'The Trusted\nOperator.',color:'#4db8ff',
+body:"People trust your judgment. They rely on your work. They just don't think of you when the room is deciding who to put on the high-visibility project. Credibility without visibility is a career ceiling — you're competent and present, but invisible in the moments that shape trajectories.",
+adv:'Pick one deliberate visibility action per week. Speak first in the next meeting. Offer to present the thing you usually just prepare. The gap closes through reps, not through a single moment.'},
+
+{id:'eager',test:function(s){return s.v>=65&&s.c<70},kick:'// Ending 03 — The perception gap',title:'The\nEager One.',color:'#ffc940',
+body:'Everyone knows your name. Not everyone fully trusts your judgment yet. You moved fast, showed up strongly, made your presence felt — and a few decisions left a residue that people noticed. The raw material is excellent. The pattern needs adjusting.',
+adv:'Before your next instinct to move fast, add one clarifying question. In your next meeting, respond once less than you naturally would and make the one response count.'},
+
+{id:'calculated',test:function(s){return s.v>=45&&s.c>=45},kick:'// Ending 05 — Solid foundation',title:'The\nCalculated.',color:'#a78bfa',
+body:"A solid first week. Not spectacular, but real. You made thoughtful calls more often than not, managed your energy reasonably, and left the week with your reputation intact and your manager's confidence established.",
+adv:"You have a clean slate and a functional baseline. The next step isn't about fixing weaknesses — it's about choosing one area to develop intentionally. Pick the meter that's lowest and design one specific behavior to move it over the next four weeks."},
+
+{id:'rebuilding',isFallback:true,test:function(){return true},kick:'// Ending 06 — The honest start',title:'The\nRebuilding.',color:'#94a3b8',
+body:"The week was hard and it showed. The combination of decisions you made left your meters below where they needed to be. This doesn't mean the job is over. First weeks are data, not verdicts. But you're starting week two with a deficit to recover from rather than momentum to build on.",
+adv:"Don't pretend the week went better than it did. Have one honest conversation with your manager this week — not to apologize, but to demonstrate that you see what happened and are adjusting."}
 ];
 
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
 
-// ─── STATE ───────────────────────────────────────────────
-
-var state = {v:35,c:35,n:35};
+var state = {v:35, c:35, n:35};
 var gameHistory = [];
 var currentSceneId = null;
 var pendingNext = null;
+var currentChoiceMap = null; // array: [semanticIdx for letter A, B, C]
+var modalOpen = false;
 
-function clamp(x){return Math.max(0,Math.min(100,x))}
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
 
-// ─── DOM HELPERS ────────────────────────────────────────
+function clamp(x){return Math.max(0, Math.min(100, x));}
 
-function $(id){return document.getElementById(id)}
+function $(id){return document.getElementById(id);}
+
+// Fisher-Yates shuffle
+function shuffle(arr){
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DOM CACHE (perf + clarity)
+// ═══════════════════════════════════════════════════════════════
+
+var dom = {};
+function cacheDom(){
+  var ids = ['t-scr','g-scr','e-scr','hud','active','modal','m-box','prog',
+    'h-day','h-scene','h-prog','h-restart',
+    'hb-v','hb-c','hb-n','hv-v','hv-c','hv-n',
+    'm-key','m-lbl','m-title','m-body','m-note','m-deltas','m-hint','btn-cont',
+    'ev-v','ev-c','ev-n','eb-v','eb-c','eb-n',
+    'e-kick','e-title','e-body','e-adv','e-log','btn-start','btn-replay'];
+  for (var i = 0; i < ids.length; i++) dom[ids[i]] = $(ids[i]);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+
+var SCREEN_TYPE = {'t-scr':'flex', 'g-scr':'block', 'e-scr':'flex'};
 
 function showScreen(id){
-  var ids = ['t-scr','g-scr','e-scr'];
-  for(var i=0;i<ids.length;i++){
-    var el = $(ids[i]);
-    if(ids[i]===id){
-      el.style.display = (id==='t-scr'||id==='e-scr') ? 'flex' : 'block';
-    } else {
-      el.style.display = 'none';
-    }
+  var ids = Object.keys(SCREEN_TYPE);
+  for (var i = 0; i < ids.length; i++){
+    var el = dom[ids[i]];
+    el.classList.remove('flex','block');
+    if (ids[i] === id) el.classList.add(SCREEN_TYPE[id]);
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// HUD
+// ═══════════════════════════════════════════════════════════════
+
 function updateHUD(scene){
-  $('hud').style.display = 'block';
-  $('h-day').textContent = scene.day.split(' — ')[0].toUpperCase();
-  $('h-scene').textContent = 'Scene '+scene.label;
-  $('h-prog').textContent = gameHistory.length+'/15';
-  $('hb-v').style.width = state.v+'%';
-  $('hb-c').style.width = state.c+'%';
-  $('hb-n').style.width = state.n+'%';
-  $('hv-v').textContent = state.v;
-  $('hv-c').textContent = state.c;
-  $('hv-n').textContent = state.n;
-  $('prog').style.width = (gameHistory.length/15*100)+'%';
+  dom.hud.style.display = 'block';
+  dom['h-day'].textContent = scene.day.split(' — ')[0].toUpperCase();
+  dom['h-scene'].textContent = 'Scene ' + scene.label;
+  // Off-by-one fix: show current scene's position, not history length
+  var sceneNum = gameHistory.length + 1;
+  dom['h-prog'].textContent = sceneNum + '/' + TOTAL_SCENES;
+  dom['hb-v'].style.width = state.v + '%';
+  dom['hb-c'].style.width = state.c + '%';
+  dom['hb-n'].style.width = state.n + '%';
+  dom['hv-v'].textContent = state.v;
+  dom['hv-c'].textContent = state.c;
+  dom['hv-n'].textContent = state.n;
+  // Progress bar fills as choices are made, not as scenes arrive
+  dom.prog.style.width = (gameHistory.length / TOTAL_SCENES * 100) + '%';
 }
 
-// ─── RENDER SCENE ───────────────────────────────────────
+function updateMetersAfterChoice(){
+  dom['hb-v'].style.width = state.v + '%';
+  dom['hb-c'].style.width = state.c + '%';
+  dom['hb-n'].style.width = state.n + '%';
+  dom['hv-v'].textContent = state.v;
+  dom['hv-c'].textContent = state.c;
+  dom['hv-n'].textContent = state.n;
+  dom.prog.style.width = (gameHistory.length / TOTAL_SCENES * 100) + '%';
+  dom['h-prog'].textContent = Math.min(gameHistory.length + 1, TOTAL_SCENES) + '/' + TOTAL_SCENES;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCENE RENDER
+// Builds DOM with createElement (no innerHTML for user-visible text),
+// uses event delegation (no inline onclick),
+// shuffles choice-to-letter mapping per scene.
+// ═══════════════════════════════════════════════════════════════
+
+var LETTERS = ['A','B','C'];
 
 function renderScene(sceneId){
   currentSceneId = sceneId;
   var s = SCENES[sceneId];
+
+  // Build shuffled mapping: letter index -> semantic choice index
+  // currentChoiceMap[0] = which semantic choice is "A" this scene
+  currentChoiceMap = shuffle([0, 1, 2]);
+
   updateHUD(s);
 
-  //   // Clear active completely first
-  var active = $('active');
-  active.innerHTML = '';
-  // Build new scene HTML
-  var choicesHtml = '';
-  for(var i=0;i<s.ch.length;i++){
-    choicesHtml += '<button class="ch" onclick="onChoice('+i+')"><div class="ch-bar"></div><span class="ch-key">'+s.ch[i].k+'</span><span class="ch-txt">'+s.ch[i].t+'</span></button>';
+  // Clear and build
+  var active = dom.active;
+  active.textContent = '';
+
+  var wrap = document.createElement('div');
+  wrap.className = 's-wrap';
+
+  // Meta row
+  var meta = document.createElement('div');
+  meta.className = 's-meta';
+
+  var daySpan = document.createElement('span');
+  daySpan.className = 's-day';
+  daySpan.textContent = s.day;
+  meta.appendChild(daySpan);
+
+  var numB = document.createElement('span');
+  numB.className = 's-num-b';
+  numB.textContent = 'Scene ' + s.label;
+  meta.appendChild(numB);
+
+  if (s.alt){
+    var altSpan = document.createElement('span');
+    altSpan.className = 's-alt';
+    altSpan.textContent = 'unlocked by earlier choice';
+    meta.appendChild(altSpan);
   }
+  wrap.appendChild(meta);
 
-  active.innerHTML =
-    '<div class="s-wrap">'+
-      '<div class="s-meta">'+
-        '<span class="s-day">'+s.day+'</span>'+
-        '<span class="s-num-b">Scene '+s.label+'</span>'+
-        (s.alt ? '<span class="s-alt">alternate path</span>' : '')+
-      '</div>'+
-      '<div class="s-bgn">'+s.label+'</div>'+
-      '<h2 class="s-title">'+s.title+'</h2>'+
-      '<div class="s-sit">'+s.sit+'<span class="s-ten">'+s.ten+'</span></div>'+
-      '<p class="s-ch-hd">// What do you do?</p>'+
-      '<div class="choices">'+choicesHtml+'</div>'+
-    '</div>';
+  // Big number
+  var bgn = document.createElement('div');
+  bgn.className = 's-bgn';
+  bgn.textContent = s.label;
+  bgn.setAttribute('aria-hidden', 'true');
+  wrap.appendChild(bgn);
 
-  // onclick handlers set inline above
+  // Title
+  var title = document.createElement('h2');
+  title.className = 's-title';
+  title.textContent = s.title;
+  wrap.appendChild(title);
 
-  // Scroll to new scene
-  // Force full opacity and scroll to top
-  var wrap = active.querySelector('.s-wrap');
-  if(wrap){ wrap.style.opacity = '1'; wrap.style.transform = 'none'; }
-  window.scrollTo({top:0, behavior:'auto'});
+  // Situation (innerHTML is safe here — content is author-controlled, contains <em>)
+  var sit = document.createElement('div');
+  sit.className = 's-sit';
+  sit.innerHTML = s.sit;
+  var ten = document.createElement('span');
+  ten.className = 's-ten';
+  ten.textContent = s.ten;
+  sit.appendChild(ten);
+  wrap.appendChild(sit);
+
+  // Choices header
+  var chHd = document.createElement('p');
+  chHd.className = 's-ch-hd';
+  chHd.appendChild(document.createTextNode('// What do you do?'));
+  var kbHint = document.createElement('span');
+  kbHint.className = 'kb';
+  kbHint.innerHTML = 'Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd>';
+  chHd.appendChild(kbHint);
+  wrap.appendChild(chHd);
+
+  // Choices container
+  var choicesEl = document.createElement('div');
+  choicesEl.className = 'choices';
+
+  for (var letterIdx = 0; letterIdx < 3; letterIdx++){
+    var semanticIdx = currentChoiceMap[letterIdx];
+    var choice = s.ch[semanticIdx];
+
+    var btn = document.createElement('button');
+    btn.className = 'ch';
+    btn.type = 'button';
+    btn.setAttribute('data-letter-idx', String(letterIdx));
+    btn.setAttribute('aria-label', 'Choice ' + LETTERS[letterIdx] + ': ' + choice.t);
+
+    var bar = document.createElement('div');
+    bar.className = 'ch-bar';
+    btn.appendChild(bar);
+
+    var keyEl = document.createElement('span');
+    keyEl.className = 'ch-key';
+    keyEl.textContent = LETTERS[letterIdx];
+    btn.appendChild(keyEl);
+
+    var txtEl = document.createElement('span');
+    txtEl.className = 'ch-txt';
+    txtEl.textContent = choice.t;
+    btn.appendChild(txtEl);
+
+    choicesEl.appendChild(btn);
+  }
+  wrap.appendChild(choicesEl);
+
+  active.appendChild(wrap);
+
+  // Trigger fade-in next frame
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ wrap.classList.add('show'); });
+  });
+
+  window.scrollTo({top: 0, behavior: 'auto'});
 }
 
-// ─── CHOICE HANDLER ─────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// CHOICE HANDLING
+// ═══════════════════════════════════════════════════════════════
 
-function onChoice(idx){
+function onChoiceByLetter(letterIdx){
+  if (modalOpen) return;
+  if (letterIdx < 0 || letterIdx > 2) return;
+  if (!currentChoiceMap) return;
+
+  var semanticIdx = currentChoiceMap[letterIdx];
   var s = SCENES[currentSceneId];
-  var ch = s.ch[idx];
-  var o = ch.o;
+  if (!s || !s.ch[semanticIdx]) return;
+
+  var choice = s.ch[semanticIdx];
+  var o = choice.o;
 
   // Apply deltas
   state.v = clamp(state.v + o.d.v);
   state.c = clamp(state.c + o.d.c);
   state.n = clamp(state.n + o.d.n);
 
+  // Determine next scene
+  var nextId = choice.nxOverride || s.nx;
 
   // Record
-  gameHistory.push({sid:currentSceneId,idx:idx,ck:ch.k,ct:ch.t,lb:o.lb,d:o.d});
-  pendingNext = ch.nx;
+  gameHistory.push({
+    sid: currentSceneId,
+    semIdx: semanticIdx,
+    letter: LETTERS[letterIdx],
+    choiceTxt: choice.t,
+    lb: o.lb,
+    d: o.d
+  });
+  pendingNext = nextId;
 
-  // Update HUD
-  $('hb-v').style.width = state.v+'%';
-  $('hb-c').style.width = state.c+'%';
-  $('hb-n').style.width = state.n+'%';
-  $('hv-v').textContent = state.v;
-  $('hv-c').textContent = state.c;
-  $('hv-n').textContent = state.n;
-
-  // Fill modal
-  $('m-key').textContent = ch.k;
-  $('m-lbl').textContent = o.lb;
-  $('m-title').textContent = o.ti;
-  $('m-body').textContent = o.bo;
-  $('m-note').textContent = o.no;
-
-  var dc = $('m-deltas');
-  dc.innerHTML = '';
-  var d = o.d;
-  if(d.v!==0) dc.innerHTML += '<span class="d-chip d-vis '+(d.v>0?'d-pos':'d-neg')+'">'+(d.v>0?'+':'')+d.v+' Visibility</span>';
-  if(d.c!==0) dc.innerHTML += '<span class="d-chip d-crd '+(d.c>0?'d-pos':'d-neg')+'">'+(d.c>0?'+':'')+d.c+' Credibility</span>';
-  if(d.n!==0) dc.innerHTML += '<span class="d-chip d-nrg '+(d.n>0?'d-pos':'d-neg')+'">'+(d.n>0?'+':'')+d.n+' Energy</span>';
-  if(d.v===0&&d.c===0&&d.n===0) dc.innerHTML = '<span class="d-chip d-nt">No change</span>';
-
-  var hint = $('m-hint');
-  if(pendingNext){
-    var ns = SCENES[pendingNext];
-    hint.innerHTML = 'Next &rarr; <span>'+ns.title+'</span>';
-  } else {
-    hint.innerHTML = '<span class="ac">Week complete &rarr;</span>';
-  }
-
-  // Show modal
-  $('modal').style.display = 'flex';
+  updateMetersAfterChoice();
+  openModal(choice, o, letterIdx);
 }
 
-// ─── CONTINUE ───────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════════════
+
+function openModal(choice, outcome, letterIdx){
+  dom['m-key'].textContent = LETTERS[letterIdx];
+  dom['m-lbl'].textContent = outcome.lb;
+  dom['m-title'].textContent = outcome.ti;
+  dom['m-body'].textContent = outcome.bo;
+  dom['m-note'].textContent = outcome.no;
+
+  // Deltas
+  var dc = dom['m-deltas'];
+  dc.textContent = '';
+  var d = outcome.d;
+  if (d.v !== 0) dc.appendChild(makeChip('vis', d.v, 'Visibility'));
+  if (d.c !== 0) dc.appendChild(makeChip('crd', d.c, 'Credibility'));
+  if (d.n !== 0) dc.appendChild(makeChip('nrg', d.n, 'Energy'));
+  if (d.v === 0 && d.c === 0 && d.n === 0){
+    var neutral = document.createElement('span');
+    neutral.className = 'd-chip d-nt';
+    neutral.textContent = 'No change';
+    dc.appendChild(neutral);
+  }
+
+  // Hint
+  var hint = dom['m-hint'];
+  hint.textContent = '';
+  if (pendingNext){
+    hint.appendChild(document.createTextNode('Next → '));
+    var ns = SCENES[pendingNext];
+    var nextSpan = document.createElement('span');
+    nextSpan.textContent = ns.title;
+    hint.appendChild(nextSpan);
+  } else {
+    var doneSpan = document.createElement('span');
+    doneSpan.className = 'ac';
+    doneSpan.textContent = 'Week complete →';
+    hint.appendChild(doneSpan);
+  }
+
+  dom.modal.classList.add('show');
+  modalOpen = true;
+  // Focus continue button for keyboard flow
+  setTimeout(function(){ dom['btn-cont'].focus(); }, 50);
+}
+
+function makeChip(type, val, label){
+  var span = document.createElement('span');
+  var cls = 'd-chip d-' + type + ' ' + (val > 0 ? 'd-pos' : 'd-neg');
+  span.className = cls;
+  span.textContent = (val > 0 ? '+' : '') + val + ' ' + label;
+  return span;
+}
+
+function closeModal(){
+  dom.modal.classList.remove('show');
+  modalOpen = false;
+}
 
 function onContinue(){
-  $('modal').style.display = 'none';
-  if(pendingNext){
+  if (!modalOpen) return;
+  closeModal();
+  if (pendingNext){
     renderScene(pendingNext);
   } else {
     showEnding();
   }
 }
 
-// ─── ENDING ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// ENDING
+// ═══════════════════════════════════════════════════════════════
 
 function showEnding(){
-  $('hud').style.display = 'none';
-  $('prog').style.width = '100%';
+  dom.hud.style.display = 'none';
+  dom.prog.style.width = '100%';
 
   var s = state;
   var ending = null;
-  for(var i=0;i<ENDINGS.length;i++){
-    if(ENDINGS[i].test(s)){ending=ENDINGS[i];break;}
+  for (var i = 0; i < ENDINGS.length; i++){
+    if (ENDINGS[i].test(s)){ ending = ENDINGS[i]; break; }
   }
-  if(!ending) ending = ENDINGS[ENDINGS.length-1];
+  // Explicit fallback safety
+  if (!ending){
+    for (var j = 0; j < ENDINGS.length; j++){
+      if (ENDINGS[j].isFallback){ ending = ENDINGS[j]; break; }
+    }
+  }
 
-  $('ev-v').textContent = s.v;
-  $('ev-c').textContent = s.c;
-  $('ev-n').textContent = s.n;
+  dom['ev-v'].textContent = s.v;
+  dom['ev-c'].textContent = s.c;
+  dom['ev-n'].textContent = s.n;
 
   setTimeout(function(){
-    $('eb-v').style.width = s.v+'%';
-    $('eb-c').style.width = s.c+'%';
-    $('eb-n').style.width = s.n+'%';
-  },100);
+    dom['eb-v'].style.width = s.v + '%';
+    dom['eb-c'].style.width = s.c + '%';
+    dom['eb-n'].style.width = s.n + '%';
+  }, 100);
 
-  $('e-kick').textContent = ending.kick;
-  $('e-title').innerHTML = ending.title.replace('\n','<br>');
-  $('e-title').style.color = ending.color;
-  $('e-body').textContent = ending.body;
-  $('e-adv').textContent = ending.adv;
+  dom['e-kick'].textContent = ending.kick;
+  // Title with line break — safe because we control the source
+  var titleParts = ending.title.split('\n');
+  dom['e-title'].textContent = '';
+  for (var t = 0; t < titleParts.length; t++){
+    dom['e-title'].appendChild(document.createTextNode(titleParts[t]));
+    if (t < titleParts.length - 1) dom['e-title'].appendChild(document.createElement('br'));
+  }
+  dom['e-title'].style.color = ending.color;
+  dom['e-body'].textContent = ending.body;
+  dom['e-adv'].textContent = ending.adv;
 
-  var log = $('e-log');
-  log.innerHTML = '';
-  for(var i=0;i<gameHistory.length;i++){
-    var h = gameHistory[i];
+  // Log
+  var log = dom['e-log'];
+  log.textContent = '';
+  for (var k = 0; k < gameHistory.length; k++){
+    var h = gameHistory[k];
     var sc = SCENES[h.sid];
-    var tot = h.d.v+h.d.c+h.d.n;
-    var cls = tot>10?'ig':tot<-10?'ib':'io';
+    var totDelta = h.d.v + h.d.c + h.d.n;
+    var cls = totDelta > 8 ? 'ig' : totDelta < -6 ? 'ib' : 'io';
+
     var row = document.createElement('div');
     row.className = 'e-row';
-    row.innerHTML =
-      '<span class="e-rn">'+String(i+1).padStart(2,'0')+'</span>'+
-      '<span class="e-rk">'+h.ck+'</span>'+
-      '<span class="e-rt">'+sc.title+'</span>'+
-      '<span class="e-ri '+cls+'">'+h.lb+'</span>';
+
+    var nEl = document.createElement('span');
+    nEl.className = 'e-rn';
+    nEl.textContent = String(k + 1).length < 2 ? '0' + (k + 1) : String(k + 1);
+    row.appendChild(nEl);
+
+    var kEl = document.createElement('span');
+    kEl.className = 'e-rk';
+    kEl.textContent = h.letter;
+    row.appendChild(kEl);
+
+    var tEl = document.createElement('span');
+    tEl.className = 'e-rt';
+    tEl.textContent = sc.title;
+    row.appendChild(tEl);
+
+    var iEl = document.createElement('span');
+    iEl.className = 'e-ri ' + cls;
+    iEl.textContent = h.lb;
+    row.appendChild(iEl);
+
     log.appendChild(row);
   }
 
   showScreen('e-scr');
-  setTimeout(function(){
-    $('e-scr').scrollIntoView({behavior:'smooth',block:'start'});
-  },60);
+  setTimeout(function(){ dom['e-scr'].scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
 }
 
-// ─── START / RESTART ────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// START / RESTART
+// ═══════════════════════════════════════════════════════════════
 
 function startGame(){
-  state = {v:35,c:35,n:35};
+  state = {v:35, c:35, n:35};
   gameHistory = [];
   currentSceneId = null;
   pendingNext = null;
-  $('active').innerHTML = '';
+  currentChoiceMap = null;
+  dom.active.textContent = '';
   showScreen('g-scr');
   renderScene('s01');
 }
 
-function restartGame(){
-  $('hud').style.display = 'none';
+function restartToTitle(){
+  if (modalOpen) closeModal();
+  state = {v:35, c:35, n:35};
+  gameHistory = [];
+  currentSceneId = null;
+  pendingNext = null;
+  currentChoiceMap = null;
+  dom.hud.style.display = 'none';
+  dom.active.textContent = '';
+  dom.prog.style.width = '0%';
   showScreen('t-scr');
-  $('prog').style.width = '0%';
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-// ─── INIT ────────────────────────────────────────────────
+function midGameRestart(){
+  if (confirm('Restart the week? Your current progress will be lost.')){
+    restartToTitle();
+  }
+}
 
-// Init — runs after DOM is ready since script is at end of body
-showScreen('t-scr');
+// ═══════════════════════════════════════════════════════════════
+// EVENT DELEGATION + KEYBOARD
+// ═══════════════════════════════════════════════════════════════
+
+function setupEvents(){
+  dom['btn-start'].addEventListener('click', startGame);
+  dom['btn-replay'].addEventListener('click', startGame);
+  dom['btn-cont'].addEventListener('click', onContinue);
+  dom['h-restart'].addEventListener('click', midGameRestart);
+
+  // Event delegation for choice buttons
+  dom.active.addEventListener('click', function(e){
+    var btn = e.target.closest && e.target.closest('.ch');
+    if (!btn) return;
+    var letterIdx = parseInt(btn.getAttribute('data-letter-idx'), 10);
+    if (!isNaN(letterIdx)) onChoiceByLetter(letterIdx);
+  });
+
+  // Close modal on backdrop click
+  dom.modal.addEventListener('click', function(e){
+    if (e.target === dom.modal){
+      // Backdrop click = continue (since modal blocks game flow)
+      onContinue();
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e){
+    // Don't trigger when focus is in an input
+    var tag = document.activeElement && document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+    if (modalOpen){
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape'){
+        e.preventDefault();
+        onContinue();
+      }
+      return;
+    }
+
+    // Title screen: Enter starts game
+    if (dom['t-scr'].classList.contains('flex')){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        startGame();
+      }
+      return;
+    }
+
+    // Ending screen: Enter restarts
+    if (dom['e-scr'].classList.contains('flex')){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        startGame();
+      }
+      return;
+    }
+
+    // Game screen: A/B/C choices
+    if (dom['g-scr'].classList.contains('block')){
+      var key = e.key.toUpperCase();
+      if (key === 'A'){ e.preventDefault(); onChoiceByLetter(0); }
+      else if (key === 'B'){ e.preventDefault(); onChoiceByLetter(1); }
+      else if (key === 'C'){ e.preventDefault(); onChoiceByLetter(2); }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+function init(){
+  cacheDom();
+  setupEvents();
+  showScreen('t-scr');
+}
+
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
